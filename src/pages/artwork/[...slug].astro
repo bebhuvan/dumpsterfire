@@ -1,0 +1,219 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const artworks = await getCollection('artwork');
+  return artworks.map((artwork) => ({
+    params: { slug: artwork.slug },
+    props: artwork,
+  }));
+}
+
+const artwork = Astro.props;
+const { Content } = await artwork.render();
+
+const formatDate = (dateStr: string) => {
+  return new Date(dateStr).toLocaleDateString('en-US', { 
+    month: 'long', 
+    day: 'numeric', 
+    year: 'numeric' 
+  });
+};
+---
+
+<BaseLayout title={`${artwork.data.title} by ${artwork.data.artist}`}>
+  <style is:global>
+    .artwork-page {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    
+    .breadcrumb {
+      font-size: .8rem;
+      color: var(--text-tertiary);
+      margin-bottom: 2rem;
+    }
+    
+    .breadcrumb a {
+      color: var(--text-tertiary);
+      text-decoration: none;
+    }
+    
+    .breadcrumb-sep {
+      margin: 0 .5rem;
+    }
+    
+    .artwork-header {
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+    
+    .artwork-image-large {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    
+    .artwork-image-large img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    
+    .artwork-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .artwork-details h3 {
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    
+    .artwork-details p {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+    
+    .curator-section {
+      background: var(--accent-subtle);
+      padding: 2rem;
+      border-radius: 4px;
+      margin: 3rem 0;
+      border-left: 3px solid var(--pastel-sage);
+    }
+    
+    .curator-label {
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-tertiary);
+      margin-bottom: .75rem;
+    }
+    
+    .curator-notes {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+    
+    .artwork-content {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin: 2rem 0;
+    }
+    
+    .source-links {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-light);
+      text-align: center;
+    }
+    
+    .source-link {
+      display: inline-block;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      margin: 0.5rem 1rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-light);
+      border-radius: 4px;
+      border-left: 3px solid var(--pastel-blue);
+    }
+    
+    @media (max-width: 768px) {
+      .artwork-page {
+        padding: 2rem 1.5rem;
+      }
+      
+      .artwork-meta {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+    }
+  </style>
+
+  <main class="artwork-page">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb sans" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="breadcrumb-sep">→</span>
+      <span>Artwork</span>
+    </nav>
+
+    <!-- Artwork Header -->
+    <header class="artwork-header">
+      <h1 class="article-title">{artwork.data.title}</h1>
+      <p class="article-subtitle">by {artwork.data.artist}</p>
+    </header>
+
+    <!-- Large Artwork Image -->
+    <div class="artwork-image-large">
+      <img 
+        src={artwork.data.image} 
+        alt={`${artwork.data.title} by ${artwork.data.artist}`}
+        loading="lazy"
+      />
+    </div>
+
+    <!-- Artwork Metadata -->
+    <div class="artwork-meta">
+      <div class="artwork-details">
+        <h3>Details</h3>
+        {artwork.data.year && <p><strong>Year:</strong> {artwork.data.year}</p>}
+        {artwork.data.medium && <p><strong>Medium:</strong> {artwork.data.medium}</p>}
+        {artwork.data.dimensions && <p><strong>Dimensions:</strong> {artwork.data.dimensions}</p>}
+        <p><strong>Added:</strong> {formatDate(artwork.data.created_date)}</p>
+      </div>
+      
+      <div class="artwork-details">
+        <h3>Collection</h3>
+        {artwork.data.source_institution && <p><strong>Institution:</strong> {artwork.data.source_institution}</p>}
+        <p><strong>Status:</strong> Public Domain</p>
+      </div>
+    </div>
+
+    <!-- Curator's Notes -->
+    {artwork.data.why_featured && (
+      <aside class="curator-section">
+        <div class="curator-label sans">Why I featured this</div>
+        <div class="curator-notes">
+          <p>{artwork.data.why_featured}</p>
+        </div>
+      </aside>
+    )}
+
+    <!-- Artwork Content/Description -->
+    <div class="artwork-content">
+      <Content />
+    </div>
+
+    <!-- Source Links -->
+    <div class="source-links">
+      {artwork.data.source_url && (
+        <a 
+          href={artwork.data.source_url} 
+          class="source-link sans" 
+          target="_blank" 
+          rel="noopener"
+        >
+          View at {artwork.data.source_institution || 'source'}
+        </a>
+      )}
+      <a href="/" class="source-link sans">
+        Back to newsletter
+      </a>
+    </div>
+  </main>
+</BaseLayout>

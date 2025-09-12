@@ -1,0 +1,148 @@
+---
+export interface Props {
+  title: string;
+  url: string;
+  description?: string;
+  via?: string;
+}
+
+const { 
+  title, 
+  url, 
+  description = '',
+  via = 'fromdumpsterfire'
+} = Astro.props;
+
+// Encode for URLs
+const encodedTitle = encodeURIComponent(title);
+const encodedUrl = encodeURIComponent(url);
+const encodedDescription = encodeURIComponent(description);
+const encodedVia = encodeURIComponent(via);
+
+// Social sharing URLs
+const twitterUrl = `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}&via=${encodedVia}`;
+const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+const emailUrl = `mailto:?subject=${encodedTitle}&body=${encodedDescription}%0A%0A${encodedUrl}`;
+const copyUrl = url;
+---
+
+<div class="social-share">
+  <span class="share-label">Share this</span>
+  <div class="share-buttons">
+    <button 
+      class="share-btn twitter-btn" 
+      onclick={`window.open('${twitterUrl}', '_blank', 'width=550,height=420')`}
+      title="Share on Twitter"
+    >
+      𝕏
+    </button>
+    <button 
+      class="share-btn linkedin-btn" 
+      onclick={`window.open('${linkedinUrl}', '_blank', 'width=550,height=420')`}
+      title="Share on LinkedIn"
+    >
+      in
+    </button>
+    <a 
+      href={emailUrl} 
+      class="share-btn email-btn"
+      title="Share via Email"
+    >
+      ✉
+    </a>
+    <button 
+      class="share-btn copy-btn" 
+      onclick={`navigator.clipboard.writeText('${copyUrl}').then(() => { this.innerHTML = '✓'; setTimeout(() => { this.innerHTML = '🔗'; }, 2000); })`}
+      title="Copy link"
+    >
+      🔗
+    </button>
+  </div>
+</div>
+
+<style>
+  .social-share {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 2rem 0;
+    padding: 1rem;
+    background: var(--accent-subtle);
+    border-radius: 8px;
+    border-left: 3px solid var(--pastel-blue);
+  }
+
+  .share-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .share-buttons {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+    border: 1px solid var(--border-light);
+  }
+
+  .share-btn:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+  }
+
+  .twitter-btn:hover {
+    background: #1da1f2;
+    color: white;
+    border-color: #1da1f2;
+  }
+
+  .linkedin-btn:hover {
+    background: #0077b5;
+    color: white;
+    border-color: #0077b5;
+  }
+
+  .email-btn:hover {
+    background: #34495e;
+    color: white;
+    border-color: #34495e;
+  }
+
+  .copy-btn:hover {
+    background: var(--pastel-sage);
+    border-color: var(--pastel-sage);
+  }
+
+  @media (max-width: 768px) {
+    .social-share {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .share-buttons {
+      gap: 0.75rem;
+    }
+
+    .share-btn {
+      width: 40px;
+      height: 40px;
+    }
+  }
+</style>

@@ -1,0 +1,272 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About">
+  <style>
+    .about-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    
+    .about-header {
+      text-align: center;
+      margin-bottom: 4rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+    
+    .about-title {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 400;
+    }
+    
+    .about-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      font-style: italic;
+      line-height: 1.6;
+    }
+    
+    .about-content {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--text-primary);
+    }
+    
+    .about-content p {
+      margin-bottom: 2rem;
+    }
+    
+    .about-content h2 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin: 3rem 0 1.5rem 0;
+      color: var(--text-primary);
+    }
+    
+    .manifesto-section {
+      background: var(--accent-subtle);
+      border-radius: 8px;
+      padding: 2.5rem;
+      margin: 3rem 0;
+      border-left: 4px solid var(--pastel-coral);
+    }
+    
+    .manifesto-title {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      font-weight: 400;
+    }
+    
+    .principles-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .principles-list li {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    
+    .principles-list li::before {
+      content: '·';
+      position: absolute;
+      left: 0;
+      color: var(--pastel-coral);
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+    
+    .contact-section {
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 2rem;
+      margin-top: 3rem;
+      text-align: center;
+      border: 1px solid var(--border-light);
+    }
+    
+    .contact-title {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      font-weight: 400;
+    }
+    
+    .contact-text {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+    
+    .contact-email {
+      display: inline-block;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 1.1rem;
+      padding: .75rem 1.5rem;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-light);
+      border-radius: 4px;
+      transition: all .2s;
+    }
+    
+    .contact-email:hover {
+      background: var(--text-primary);
+      color: var(--bg-primary);
+      border-color: var(--text-primary);
+    }
+    
+    .stats-row {
+      display: flex;
+      justify-content: space-around;
+      margin: 3rem 0;
+      padding: 2rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border: 1px solid var(--border-light);
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--text-primary);
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: .85rem;
+      color: var(--text-secondary);
+      margin-top: .5rem;
+    }
+    
+    @media (max-width: 768px) {
+      .about-container {
+        padding: 2rem 1.5rem;
+      }
+      
+      .about-title {
+        font-size: 2rem;
+      }
+      
+      .manifesto-section {
+        padding: 1.5rem;
+      }
+      
+      .stats-row {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+    }
+  </style>
+
+  <main class="about-container">
+    <header class="about-header">
+      <h1 class="about-title">About</h1>
+      <p class="about-subtitle">
+        Rescue work for the internet age
+      </p>
+    </header>
+
+    <div class="about-content">
+      <p>
+        The internet has become a dumpster fire. Not all of it—there are still wonderful, thoughtful corners where real humans create meaningful things. But finding them requires more archaeology than browsing.
+      </p>
+
+      <p>
+        That's where we come in. <strong>From the Dumpster Fire</strong> is a weekly rescue mission. We dig through the algorithmic noise, the engagement bait, and the hot takes to find the signal: articles that make you think differently, podcasts that change your perspective, books that stick with you for months.
+      </p>
+
+      <div class="stats-row">
+        <div class="stat-item">
+          <span class="stat-number">47</span>
+          <div class="stat-label sans">Issues Published</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">89</span>
+          <div class="stat-label sans">Articles Rescued</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">0</span>
+          <div class="stat-label sans">Hot Takes</div>
+        </div>
+      </div>
+
+      <h2>Why This Matters</h2>
+      
+      <p>
+        We're drowning in information but starving for wisdom. Every platform optimizes for engagement over enlightenment, clicks over contemplation. The result is a cultural attention deficit disorder where we consume everything and digest nothing.
+      </p>
+
+      <p>
+        The rise of AI-generated content has made this worse. We're not just fighting human noise anymore—we're battling algorithmic pollution at scale. Every day, thousands of articles get published that nobody really wrote and nobody really needs to read.
+      </p>
+
+      <p>
+        Meanwhile, genuinely insightful creators—people with decades of experience and hard-won wisdom—struggle to find audiences. Their work gets buried under the avalanche of content designed to game recommendation algorithms rather than expand minds.
+      </p>
+
+      <div class="manifesto-section">
+        <h3 class="manifesto-title">Our Principles</h3>
+        <ul class="principles-list">
+          <li><strong>Depth over breadth:</strong> We'd rather share one life-changing essay than ten mediocre ones.</li>
+          <li><strong>Context over content:</strong> Why something matters is often more important than what it says.</li>
+          <li><strong>Humans over algorithms:</strong> Every recommendation is personally read, considered, and curated.</li>
+          <li><strong>Questions over answers:</strong> The best content makes you think, not just nod along.</li>
+          <li><strong>Timeless over timely:</strong> We prefer pieces you'll still find valuable next year.</li>
+        </ul>
+      </div>
+
+      <h2>How It Works</h2>
+
+      <p>
+        Every week, I read dozens of articles, listen to hours of podcasts, and dig through archives both new and old. The goal isn't to be comprehensive—it's to be selective. If something makes me stop, think, or see the world differently, it might end up in the newsletter.
+      </p>
+
+      <p>
+        Each recommendation comes with context: why I rescued it from the fire, what makes it worth your time, and sometimes what you should skip. Think of it as having a friend who reads everything so you don't have to.
+      </p>
+
+      <p>
+        This isn't news. It's not hot takes or breaking analysis. It's the slower, deeper stuff that actually changes how you think and work. The kind of content that platforms don't optimize for but humans desperately need.
+      </p>
+
+      <h2>What We Don't Do</h2>
+
+      <p>
+        We don't chase trends, break news, or manufacture urgency. We don't track you, serve ads, or sell your attention to the highest bidder. We don't use AI to generate content, recommendations, or even subject lines.
+      </p>
+
+      <p>
+        We also don't pretend to be objective. This is one person's highly subjective filter applied to the internet's infinite stream. If that filter doesn't match your interests, that's perfectly fine—there are plenty of other curators doing excellent work.
+      </p>
+
+      <h2>About the Curator</h2>
+
+      <p>
+        I'm someone who reads too much and has strong opinions about RSS feeds. I've been professionally curious about the intersection of technology and human attention for over a decade, working with companies trying to build more thoughtful digital products.
+      </p>
+
+      <p>
+        I believe the internet can be a garden, not just a highway. This newsletter is my small contribution to that vision.
+      </p>
+    </div>
+
+    <div class="contact-section">
+      <h3 class="contact-title">Get in Touch</h3>
+      <p class="contact-text">
+        Found something worth rescuing? Have thoughts on curation in the age of AI? 
+        I'd love to hear from you.
+      </p>
+      <a href="mailto:hello@fromthedumpsterfire.com" class="contact-email sans">
+        hello@fromthedumpsterfire.com
+      </a>
+    </div>
+  </main>
+</BaseLayout>

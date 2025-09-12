@@ -1,0 +1,293 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+
+// Sample data for archived articles
+const archiveArticles = [
+  {
+    title: "The Garden You Plant for Someone Else",
+    excerpt: "Robin Sloan on creating things that outlast our attention spans. A piece about websites, olive trees, and the radical act of planning for a future you won't optimize for.",
+    source: "Robin Sloan's Lab Newsletter",
+    type: "essay",
+    readingTime: 28,
+    url: "/articles/the-garden-you-plant-for-someone-else",
+    foundDate: "1 week ago"
+  },
+  {
+    title: "The Cost of Constant Novelty",
+    excerpt: "On how our hunger for the new has made us forget the pleasure of returning...",
+    source: "Aeon Magazine",
+    type: "essay",
+    readingTime: 12,
+    foundDate: "3 days ago"
+  },
+  {
+    title: "Ezra Klein with Jenny Odell: Time, Attention, and the Climate Crisis",
+    excerpt: "What does it mean to pay attention when everything demands urgency? A conversation that refuses easy answers about productivity and presence.",
+    source: "The Ezra Klein Show",
+    type: "podcast",
+    readingTime: 47,
+    foundDate: "5 days ago",
+    curatorNote: "The silence between 23:00-23:45 contains everything. Don't skip it."
+  },
+  {
+    title: "Frank Chimero: The Shape of Design",
+    excerpt: "Chapter 3 on improvisation remains unmatched. Some books age. This one deepens. It's free online, which tells you everything about Chimero's priorities.",
+    source: "Self-published, still perfect",
+    type: "book",
+    readingTime: 45,
+    url: "/articles/frank-chimero-shape-of-design",
+    foundDate: "2 weeks ago"
+  },
+  {
+    title: "The Age of Surveillance Capitalism",
+    excerpt: "Shoshana Zuboff on behavioral surplus. Required reading for anyone who builds products or wonders why everything feels exploitative.",
+    source: "Chapter 3, Public Affairs 2019",
+    type: "book",
+    readingTime: 25,
+    foundDate: "2 weeks ago"
+  },
+  {
+    title: "The 60-Year Scientific Screwup That Helped Covid Kill",
+    excerpt: "How a misunderstanding about airborne disease persisted for decades. Sometimes the most important stories are about what we got wrong.",
+    source: "WIRED",
+    type: "essay",
+    readingTime: 18,
+    foundDate: "1 week ago"
+  }
+];
+
+const issueArchive = [
+  { number: 47, date: "December 15, 2024", theme: "Rescue Work" },
+  { number: 46, date: "December 8, 2024", theme: "Signal vs Noise" },
+  { number: 45, date: "December 1, 2024", theme: "Deep Time" },
+  { number: 44, date: "November 24, 2024", theme: "Attention Economy" },
+  { number: 43, date: "November 17, 2024", theme: "Digital Gardens" }
+];
+---
+
+<BaseLayout title="Archive">
+  <style>
+    .archive-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    
+    .archive-header {
+      text-align: center;
+      margin-bottom: 4rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+    
+    .archive-title {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 400;
+    }
+    
+    .archive-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      font-style: italic;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .archive-sections {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 4rem;
+    }
+    
+    .articles-section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      color: var(--text-primary);
+      font-weight: 400;
+    }
+    
+    .articles-grid {
+      display: grid;
+      gap: 3rem;
+    }
+    
+    .issues-sidebar h2 {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      color: var(--text-primary);
+      font-weight: 400;
+    }
+    
+    .issue-item {
+      padding: 1.2rem;
+      background: var(--bg-secondary);
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      border-top: 2px solid var(--pastel-coral);
+      transition: all .2s;
+    }
+    
+    .issue-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .05);
+    }
+    
+    .issue-item:nth-child(2n) {
+      border-top-color: var(--pastel-blue);
+    }
+    
+    .issue-item:nth-child(3n) {
+      border-top-color: var(--pastel-mint);
+    }
+    
+    .issue-item:nth-child(4n) {
+      border-top-color: var(--pastel-sage);
+    }
+    
+    .issue-number {
+      font-size: .8rem;
+      color: var(--text-tertiary);
+      margin-bottom: .3rem;
+    }
+    
+    .issue-link {
+      font-size: 1rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: block;
+      margin-bottom: .3rem;
+      transition: color .2s;
+    }
+    
+    .issue-link:hover {
+      color: var(--text-secondary);
+    }
+    
+    .issue-theme {
+      font-size: .85rem;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+    
+    .issue-date {
+      font-size: .75rem;
+      color: var(--text-tertiary);
+      margin-top: .3rem;
+    }
+    
+    .search-section {
+      margin-bottom: 3rem;
+      padding: 2rem;
+      background: var(--accent-subtle);
+      border-radius: 4px;
+      text-align: center;
+    }
+    
+    .search-input {
+      width: 100%;
+      max-width: 400px;
+      padding: 1rem;
+      border: 1px solid var(--border-light);
+      border-radius: 4px;
+      font-size: 1rem;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+    
+    .search-input::placeholder {
+      color: var(--text-tertiary);
+      font-style: italic;
+    }
+    
+    @media (max-width: 768px) {
+      .archive-sections {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+      
+      .archive-container {
+        padding: 2rem 1.5rem;
+      }
+      
+      .archive-title {
+        font-size: 2rem;
+      }
+    }
+  </style>
+
+  <main class="archive-container">
+    <header class="archive-header">
+      <h1 class="archive-title">Archive</h1>
+      <p class="archive-subtitle">
+        Everything we've rescued from the dumpster fire, organized and searchable. 
+        Because sometimes the best finds are the ones you stumble upon months later.
+      </p>
+    </header>
+
+    <div class="search-section">
+      <input 
+        type="text" 
+        class="search-input sans" 
+        placeholder="Search articles, sources, or topics..."
+        id="searchInput"
+      >
+    </div>
+
+    <div class="archive-sections">
+      <section class="articles-section">
+        <h2>All Articles</h2>
+        <div class="articles-grid">
+          {archiveArticles.map(article => (
+            <ArticleCard
+              title={article.title}
+              excerpt={article.excerpt}
+              source={article.source}
+              type={article.type}
+              readingTime={article.readingTime}
+              url={article.url}
+              foundDate={article.foundDate}
+              curatorNote={article.curatorNote}
+            />
+          ))}
+        </div>
+      </section>
+
+      <aside class="issues-sidebar">
+        <h2>Recent Issues</h2>
+        {issueArchive.map(issue => (
+          <article class="issue-item">
+            <div class="issue-number sans">Issue {String(issue.number).padStart(3, '0')}</div>
+            <a href={`/issues/${issue.number}`} class="issue-link">
+              {issue.theme}
+            </a>
+            <div class="issue-date sans">{issue.date}</div>
+          </article>
+        ))}
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    // Simple client-side search functionality
+    const searchInput = document.getElementById('searchInput');
+    const articles = document.querySelectorAll('.articles-grid > *');
+    
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        
+        articles.forEach(article => {
+          const text = article.textContent?.toLowerCase() || '';
+          if (text.includes(searchTerm) || searchTerm === '') {
+            article.style.display = 'block';
+          } else {
+            article.style.display = 'none';
+          }
+        });
+      });
+    }
+  </script>
+</BaseLayout>

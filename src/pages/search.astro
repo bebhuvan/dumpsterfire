@@ -1,0 +1,342 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+// Get all searchable content
+const articles = await getCollection('articles');
+const artworks = await getCollection('artwork');
+
+// Format for client-side search
+const searchData = [
+  ...articles.map(article => ({
+    type: 'article',
+    title: article.data.title,
+    excerpt: article.data.excerpt,
+    url: `/articles/${article.slug}`,
+    source: article.data.source,
+    author: article.data.author,
+    topics: article.data.topics || [],
+    publishedDate: article.data.publishedDate,
+    slug: article.slug
+  })),
+  ...artworks.map(artwork => ({
+    type: 'artwork',
+    title: artwork.data.title,
+    excerpt: artwork.data.description || artwork.data.why_featured || '',
+    url: `/artwork/${artwork.slug}`,
+    source: artwork.data.source_institution,
+    author: artwork.data.artist,
+    topics: [],
+    publishedDate: artwork.data.created_date,
+    slug: artwork.slug
+  }))
+];
+---
+
+<BaseLayout title="Search">
+  <main class="search-container">
+    <div class="search-header">
+      <h1 class="search-title">Search</h1>
+      <p class="search-subtitle">Find articles, artwork, and topics from the archive</p>
+    </div>
+
+    <div class="search-box">
+      <input 
+        type="search" 
+        id="search-input" 
+        placeholder="Search articles, topics, sources..." 
+        class="search-input"
+      >
+      <div class="search-filters">
+        <label>
+          <input type="radio" name="type" value="all" checked> All
+        </label>
+        <label>
+          <input type="radio" name="type" value="article"> Articles
+        </label>
+        <label>
+          <input type="radio" name="type" value="artwork"> Artwork
+        </label>
+      </div>
+    </div>
+
+    <div class="search-stats" id="search-stats" style="display: none;">
+      <span id="results-count">0</span> results found
+    </div>
+
+    <div class="search-results" id="search-results"></div>
+
+    <div class="no-results" id="no-results" style="display: none;">
+      <p>No results found. Try adjusting your search terms.</p>
+    </div>
+  </main>
+
+  <script define:vars={{ searchData }}>
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+    const searchStats = document.getElementById('search-stats');
+    const noResults = document.getElementById('no-results');
+    const resultsCount = document.getElementById('results-count');
+    const typeFilters = document.querySelectorAll('input[name="type"]');
+
+    let currentQuery = '';
+    let currentType = 'all';
+
+    function performSearch(query, type) {
+      const normalizedQuery = query.toLowerCase().trim();
+      
+      if (!normalizedQuery) {
+        searchResults.innerHTML = '';
+        searchStats.style.display = 'none';
+        noResults.style.display = 'none';
+        return;
+      }
+
+      const filteredData = type === 'all' ? searchData : searchData.filter(item => item.type === type);
+      
+      const results = filteredData.filter(item => {
+        const searchFields = [
+          item.title,
+          item.excerpt,
+          item.source || '',
+          item.author || '',
+          ...(item.topics || [])
+        ].join(' ').toLowerCase();
+        
+        return searchFields.includes(normalizedQuery);
+      });
+
+      // Sort by relevance (title matches first, then content matches)
+      results.sort((a, b) => {
+        const aTitle = a.title.toLowerCase().includes(normalizedQuery) ? 1 : 0;
+        const bTitle = b.title.toLowerCase().includes(normalizedQuery) ? 1 : 0;
+        if (aTitle !== bTitle) return bTitle - aTitle;
+        
+        return new Date(b.publishedDate) - new Date(a.publishedDate);
+      });
+
+      displayResults(results, normalizedQuery);
+    }
+
+    function displayResults(results, query) {
+      resultsCount.textContent = results.length;
+      searchStats.style.display = 'block';
+
+      if (results.length === 0) {
+        searchResults.innerHTML = '';
+        noResults.style.display = 'block';
+        return;
+      }
+
+      noResults.style.display = 'none';
+      
+      // Create results using a cleaner template approach with proper escaping
+      const resultsHTML = results.map(result => {
+        const safeTitle = escapeHtml(result.title);
+        const safeExcerpt = escapeHtml(truncate(result.excerpt, 150));
+        const safeUrl = escapeHtml(result.url);
+        const safeSource = result.source ? escapeHtml(result.source) : '';
+        const safeAuthor = result.author ? escapeHtml(result.author) : '';
+        
+        return `
+          <article class="search-result">
+            <div class="result-meta">
+              <span class="result-type">${escapeHtml(result.type)}</span>
+              ${safeSource ? `<span class="result-source">${safeSource}</span>` : ''}
+            </div>
+            <h3 class="result-title">
+              <a href="${safeUrl}">${highlightText(safeTitle, query)}</a>
+            </h3>
+            <p class="result-excerpt">${highlightText(safeExcerpt, query)}</p>
+            ${safeAuthor ? `<div class="result-author">by ${safeAuthor}</div>` : ''}
+          </article>
+        `;
+      }).join('');
+      
+      searchResults.innerHTML = resultsHTML;
+    }
+    
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function highlightText(text, query) {
+      if (!query) return text;
+      const regex = new RegExp(`(${query})`, 'gi');
+      return text.replace(regex, '<mark>$1</mark>');
+    }
+
+    function truncate(text, length) {
+      return text.length > length ? text.substring(0, length) + '...' : text;
+    }
+
+    // Event listeners
+    searchInput.addEventListener('input', (e) => {
+      currentQuery = e.target.value;
+      performSearch(currentQuery, currentType);
+    });
+
+    typeFilters.forEach(filter => {
+      filter.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          currentType = e.target.value;
+          performSearch(currentQuery, currentType);
+        }
+      });
+    });
+
+    // Handle URL search params
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryParam = urlParams.get('q');
+    if (queryParam) {
+      searchInput.value = queryParam;
+      currentQuery = queryParam;
+      performSearch(currentQuery, currentType);
+    }
+  </script>
+
+  <style>
+    .search-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .search-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .search-title {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 400;
+    }
+
+    .search-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+
+    .search-box {
+      margin-bottom: 2rem;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      font-size: 1.1rem;
+      border: 2px solid var(--border-light);
+      border-radius: 8px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: inherit;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--pastel-blue);
+    }
+
+    .search-filters {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .search-filters label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+
+    .search-stats {
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+      margin-bottom: 2rem;
+    }
+
+    .search-result {
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .result-meta {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-type {
+      font-size: 0.8rem;
+      padding: 0.2rem 0.6rem;
+      background: var(--accent-subtle);
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .result-source {
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+      font-style: italic;
+    }
+
+    .result-title {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+
+
+    .result-excerpt {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-author {
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+      font-style: italic;
+    }
+
+    mark {
+      background: rgba(255, 255, 0, 0.3);
+      padding: 0.1rem 0.2rem;
+      border-radius: 2px;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 3rem 0;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 768px) {
+      .search-container {
+        padding: 2rem 1.5rem;
+      }
+
+      .search-title {
+        font-size: 2rem;
+      }
+
+      .search-filters {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .result-title {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</BaseLayout>

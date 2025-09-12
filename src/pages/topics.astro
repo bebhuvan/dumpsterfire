@@ -1,0 +1,327 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Sample topics data
+const topics = [
+  {
+    name: "Long-term Thinking",
+    slug: "long-term-thinking",
+    description: "Articles about building for the future, planning beyond quarters, and thinking in decades rather than days.",
+    icon: "🌱",
+    color: "sage",
+    count: 12
+  },
+  {
+    name: "Digital Gardens", 
+    slug: "digital-gardens",
+    description: "Personal websites, wikis, and other spaces for growing ideas over time. The antithesis of the feed.",
+    icon: "🌿",
+    color: "mint",
+    count: 8
+  },
+  {
+    name: "Attention Economy",
+    slug: "attention-economy",
+    description: "How platforms capture and monetize attention, and strategies for reclaiming focus in a distracted world.",
+    icon: "👁️",
+    color: "coral",
+    count: 15
+  },
+  {
+    name: "AI & Creativity",
+    slug: "ai-creativity", 
+    description: "The intersection of artificial intelligence and human creativity. What gets lost, what gets found.",
+    icon: "🤖",
+    color: "blue",
+    count: 9
+  },
+  {
+    name: "Web Philosophy",
+    slug: "web-philosophy",
+    description: "Deep thoughts on what the internet could be, should be, and sometimes still is when we're not looking.",
+    icon: "🕸️",
+    color: "lavender",
+    count: 18
+  },
+  {
+    name: "Surveillance Capitalism",
+    slug: "surveillance-capitalism",
+    description: "How our data becomes their profit. Essential reading for anyone who uses the internet (so, everyone).",
+    icon: "📱",
+    color: "peach",
+    count: 6
+  },
+  {
+    name: "Design Systems",
+    slug: "design-systems",
+    description: "Thoughtful approaches to creating consistent, sustainable design at scale. Process over aesthetics.",
+    icon: "⚡",
+    color: "yellow",
+    count: 7
+  },
+  {
+    name: "Indie Web",
+    slug: "indie-web",
+    description: "Personal websites, RSS feeds, and other technologies for a decentralized, human-scale internet.",
+    icon: "🏠",
+    color: "sage",
+    count: 11
+  }
+];
+---
+
+<BaseLayout title="Topics">
+  <style>
+    .topics-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    
+    .topics-header {
+      text-align: center;
+      margin-bottom: 4rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+    
+    .topics-title {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 400;
+    }
+    
+    .topics-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      font-style: italic;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .topics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+    
+    .topic-card {
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 2rem;
+      transition: all .3s ease;
+      border: 1px solid var(--border-light);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .topic-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--pastel-coral);
+      transition: opacity .2s;
+    }
+    
+    .topic-card.sage::before {
+      background: var(--pastel-sage);
+    }
+    
+    .topic-card.mint::before {
+      background: var(--pastel-mint);
+    }
+    
+    .topic-card.coral::before {
+      background: var(--pastel-coral);
+    }
+    
+    .topic-card.blue::before {
+      background: var(--pastel-blue);
+    }
+    
+    .topic-card.lavender::before {
+      background: var(--pastel-lavender);
+    }
+    
+    .topic-card.peach::before {
+      background: var(--pastel-peach);
+    }
+    
+    .topic-card.yellow::before {
+      background: var(--pastel-yellow);
+    }
+    
+    .topic-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, .1);
+    }
+    
+    .topic-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .topic-icon {
+      font-size: 2rem;
+      margin-right: 1rem;
+    }
+    
+    .topic-name {
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text-primary);
+    }
+    
+    .topic-count {
+      background: var(--bg-primary);
+      padding: .2rem .6rem;
+      border-radius: 12px;
+      font-size: .75rem;
+      color: var(--text-tertiary);
+      margin-left: auto;
+    }
+    
+    .topic-description {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      font-size: .95rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .topic-link {
+      display: inline-block;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: .85rem;
+      padding: .5rem 1rem;
+      border: 1px solid var(--border-light);
+      border-radius: 4px;
+      transition: all .2s;
+      background: var(--bg-primary);
+    }
+    
+    .topic-link:hover {
+      background: var(--text-primary);
+      color: var(--bg-primary);
+      border-color: var(--text-primary);
+    }
+    
+    .stats-section {
+      background: var(--accent-subtle);
+      border-radius: 8px;
+      padding: 3rem;
+      text-align: center;
+    }
+    
+    .stats-title {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      font-weight: 400;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 2rem;
+    }
+    
+    .stat-item {
+      padding: 1rem;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--text-primary);
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: .85rem;
+      color: var(--text-secondary);
+      margin-top: .5rem;
+    }
+    
+    @media (max-width: 768px) {
+      .topics-container {
+        padding: 2rem 1.5rem;
+      }
+      
+      .topics-title {
+        font-size: 2rem;
+      }
+      
+      .topics-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      .topic-card {
+        padding: 1.5rem;
+      }
+      
+      .stats-section {
+        padding: 2rem;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+      }
+    }
+  </style>
+
+  <main class="topics-container">
+    <header class="topics-header">
+      <h1 class="topics-title">Topics</h1>
+      <p class="topics-subtitle">
+        The major themes that keep showing up in our rescue work. 
+        Think of these as the filing system for a very particular kind of library.
+      </p>
+    </header>
+
+    <div class="topics-grid">
+      {topics.map(topic => (
+        <article class={`topic-card ${topic.color}`}>
+          <header class="topic-header">
+            <span class="topic-icon">{topic.icon}</span>
+            <h2 class="topic-name">{topic.name}</h2>
+            <span class="topic-count sans">{topic.count}</span>
+          </header>
+          <p class="topic-description">{topic.description}</p>
+          <a href={`/topics/${topic.slug}`} class="topic-link sans">
+            Explore articles →
+          </a>
+        </article>
+      ))}
+    </div>
+
+    <section class="stats-section">
+      <h2 class="stats-title">By the Numbers</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">89</span>
+          <div class="stat-label sans">Articles Rescued</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">47</span>
+          <div class="stat-label sans">Issues Published</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">8</span>
+          <div class="stat-label sans">Active Topics</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">∞</span>
+          <div class="stat-label sans">Hot Takes Avoided</div>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

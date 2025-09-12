@@ -1,0 +1,332 @@
+media:
+  - name: uploads
+    label: Media
+    input: public/images/uploads
+    output: /images/uploads
+    categories: [ image ]
+  - name: files
+    label: Documents
+    input: public/files
+    output: /files
+    categories: [ document, compressed ]
+
+# Reusable field components
+components:
+  seo:
+    label: SEO Settings
+    type: object
+    fields:
+      - { name: meta_title, label: Meta title, type: string, options: { maxlength: 70 } }
+      - { name: meta_description, label: Meta description, type: text, options: { maxlength: 180 } }
+      - { name: og_image, label: Social image, type: image }
+
+content:
+  - name: articles
+    label: Articles
+    type: collection
+    path: src/content/articles
+    format: yaml-frontmatter
+    filename: "{slug}.md"
+    view:
+      fields: [ title, articleType, readingTime, issueNumber, featured ]
+      sort: [ foundDate, title ]
+      default: { sort: foundDate, order: desc }
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: slug
+        label: URL Slug
+        type: string
+        required: true
+        description: "kebab-case URL segment (auto-generated from title if empty)"
+      - name: subtitle
+        label: Subtitle
+        type: string
+      - name: source
+        label: Source Publication
+        type: string
+        required: true
+        help: The original publication or platform (e.g., "Aeon Magazine", "Dense Discovery")
+      - name: originalUrl
+        label: Original URL
+        type: string
+        pattern: { regex: "^(https?://).+$", message: "Must be a valid URL" }
+        help: Link to the original article
+      - name: author
+        label: Author
+        type: string
+      - name: publishedDate
+        label: Published Date
+        type: date
+        required: true
+        help: When the original article was published
+      - name: foundDate
+        label: Found Date
+        type: date
+        help: When you discovered this article
+      - name: readingTime
+        label: Reading Time (minutes)
+        type: number
+        required: true
+      - name: articleType
+        label: Content Type
+        type: select
+        required: true
+        values:
+          - essay
+          - podcast
+          - video
+          - newsletter
+          - paper
+          - thread
+          - book
+      - name: topics
+        label: Topics/Tags
+        type: string
+        list:
+          min: 1
+          max: 10
+          default: []
+        help: Relevant topic tags for categorization
+      - name: issueNumber
+        label: Issue Number
+        type: number
+        help: If featured in a specific issue
+      - name: featured
+        label: Featured Article
+        type: boolean
+        default: false
+      - name: curatorNotes
+        label: Curator Notes
+        type: rich-text
+        required: true
+        help: Your personal thoughts on why this article is worth reading
+      - name: excerpt
+        label: Article Summary
+        type: rich-text
+        required: true
+        help: A summary of the article's main points
+      - name: pullQuote
+        label: Pull Quote
+        type: string
+        help: A compelling quote to highlight from the article
+
+  - name: issues
+    label: Newsletter Issues
+    type: collection
+    path: src/content/issues
+    format: yaml-frontmatter
+    filename: "issue-{issueNumber}.md"
+    view:
+      fields: [ issueNumber, title, publishDate, theme ]
+      sort: [ issueNumber ]
+      default: { sort: issueNumber, order: desc }
+    fields:
+      - name: issueNumber
+        label: Issue Number
+        type: number
+        required: true
+      - name: title
+        label: Issue Title
+        type: string
+        required: true
+      - name: publishDate
+        label: Publish Date
+        type: date
+        required: true
+      - name: theme
+        label: Issue Theme
+        type: string
+        help: Optional theme for the issue
+      - name: openingNote
+        label: Opening Note
+        type: rich-text
+        help: Introduction or opening thoughts
+      - name: closingThought
+        label: Closing Thought
+        type: rich-text
+        help: Concluding reflections
+
+  - name: topics
+    label: Topics
+    type: collection
+    path: src/content/topics
+    extension: json
+    fields:
+      - name: name
+        label: Topic Name
+        type: string
+        required: true
+      - name: slug
+        label: URL Slug
+        type: string
+        required: true
+      - name: description
+        label: Description
+        type: rich-text
+        required: true
+      - name: icon
+        label: Icon
+        type: string
+        required: true
+        help: Icon identifier or emoji
+      - name: color
+        label: Color Theme
+        type: select
+        required: true
+        values:
+          - coral
+          - blue
+          - mint
+          - lavender
+          - peach
+          - sage
+          - yellow
+      - name: featured
+        label: Featured Topic
+        type: boolean
+        default: false
+
+  # Public Domain Art Collection
+  - name: artwork
+    label: Public Domain Art
+    type: collection
+    path: src/content/artwork
+    format: yaml-frontmatter
+    filename: "{slug}.md"
+    view:
+      fields: [ title, artist, year, featured_on_homepage ]
+      sort: [ created_date ]
+      default: { sort: created_date, order: desc }
+    fields:
+      - name: title
+        label: Artwork Title
+        type: string
+        required: true
+      - name: slug
+        label: URL Slug
+        type: string
+        required: true
+      - name: artist
+        label: Artist Name
+        type: string
+        required: true
+      - name: year
+        label: Year Created
+        type: string
+        description: "e.g., '1889' or 'c. 1650'"
+      - name: medium
+        label: Medium
+        type: string
+        description: "e.g., 'Oil on canvas', 'Watercolor', 'Engraving'"
+      - name: dimensions
+        label: Dimensions
+        type: string
+        description: "Original dimensions if known"
+      - name: image
+        label: Artwork Image
+        type: image
+        required: true
+        options:
+          media: uploads
+          path: artwork
+      - name: source_institution
+        label: Source Institution
+        type: string
+        description: "Museum, library, or archive"
+      - name: source_url
+        label: Source URL
+        type: string
+        pattern: { regex: "^(https?://).+$", message: "Must be a valid URL" }
+        description: "Link to original source"
+      - name: description
+        label: Description
+        type: rich-text
+        description: "Brief description or context about the artwork"
+      - name: why_featured
+        label: Why This Art?
+        type: text
+        description: "Your curatorial note about why this piece resonates"
+      - name: featured_on_homepage
+        label: Featured on Homepage
+        type: boolean
+        default: false
+        description: "Show this artwork in the homepage art section"
+      - name: created_date
+        label: Date Added
+        type: date
+        required: true
+        default: "today"
+      - { name: seo, label: SEO, component: seo }
+
+  # Editorial Notes & Commentary
+  - name: editorial
+    label: Editorial Notes
+    type: collection
+    path: src/content/editorial
+    extension: json
+    view:
+      fields: [ note, type, issue_number, featured ]
+      sort: [ created_date ]
+      default: { sort: created_date, order: desc }
+    fields:
+      - name: note
+        label: Editorial Note
+        type: text
+        required: true
+        description: "Your personal commentary, observation, or aside"
+      - name: type
+        label: Note Type
+        type: select
+        required: true
+        values:
+          - curator
+          - margin
+          - standalone
+        description: "Curator: article-specific commentary, Margin: sidebar notes, Standalone: general observations"
+      - name: issue_number
+        label: Issue Number
+        type: number
+        description: "Associate with a specific issue (optional)"
+      - name: position
+        label: Position in Layout
+        type: select
+        required: true
+        default: middle
+        values:
+          - top
+          - middle
+          - bottom
+        description: "Where to display this note in the newsletter layout"
+      - name: featured
+        label: Feature This Note
+        type: boolean
+        default: false
+        description: "Show prominently in the current issue"
+      - name: created_date
+        label: Date Created
+        type: date
+        required: true
+        default: "today"
+
+  # Site configuration
+  - name: site_config
+    label: Site Settings
+    type: file
+    path: src/data/site.json
+    format: json
+    fields:
+      - { name: title, label: Site Title, type: string, default: "From the Dumpster Fire" }
+      - { name: tagline, label: Site Tagline, type: string, default: "Rescuing signal from the algorithmic inferno" }
+      - { name: description, label: Site Description, type: text }
+      - { name: curator_name, label: Curator Name, type: string }
+      - { name: curator_bio, label: Curator Bio, type: text }
+      - { name: contact_email, label: Contact Email, type: string }
+      - { name: twitter_handle, label: Twitter Handle, type: string }
+
+# Global settings
+settings:
+  content:
+    merge: true   # preserve untouched keys when editing partial files

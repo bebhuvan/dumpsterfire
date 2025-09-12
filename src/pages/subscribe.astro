@@ -1,0 +1,353 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Subscribe">
+  <style>
+    .subscribe-container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    
+    .subscribe-header {
+      margin-bottom: 3rem;
+    }
+    
+    .subscribe-title {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 400;
+    }
+    
+    .subscribe-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      font-style: italic;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+    
+    .preview-section {
+      background: var(--accent-subtle);
+      border-radius: 8px;
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+      text-align: left;
+    }
+    
+    .preview-title {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      font-weight: 400;
+      text-align: center;
+    }
+    
+    .preview-content {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+    
+    .preview-content p {
+      margin-bottom: 1.5rem;
+    }
+    
+    .preview-content p:last-child {
+      margin-bottom: 0;
+    }
+    
+    .form-section {
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 2.5rem;
+      border: 1px solid var(--border-light);
+      margin-bottom: 3rem;
+    }
+    
+    .form-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      font-weight: 400;
+    }
+    
+    .form-description {
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    
+    .subscribe-form {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .email-input {
+      flex: 1;
+      padding: 1rem;
+      border: 1px solid var(--border-light);
+      border-radius: 4px;
+      font-size: 1rem;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+    
+    .email-input::placeholder {
+      color: var(--text-tertiary);
+      font-style: italic;
+    }
+    
+    .subscribe-button {
+      padding: 1rem 1.5rem;
+      background: var(--text-primary);
+      color: var(--bg-primary);
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    
+    .subscribe-button:hover {
+      background: var(--text-secondary);
+      transform: translateY(-1px);
+    }
+    
+    .privacy-note {
+      font-size: .85rem;
+      color: var(--text-tertiary);
+      line-height: 1.5;
+    }
+    
+    .stats-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    
+    .stat-item {
+      padding: 1.5rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border: 1px solid var(--border-light);
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 400;
+      color: var(--text-primary);
+      display: block;
+      margin-bottom: .5rem;
+    }
+    
+    .stat-label {
+      font-size: .9rem;
+      color: var(--text-secondary);
+    }
+    
+    .promises-section {
+      text-align: left;
+      max-width: 600px;
+      margin: 0 auto 3rem auto;
+    }
+    
+    .promises-title {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      font-weight: 400;
+      text-align: center;
+    }
+    
+    .promises-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .promises-list li {
+      margin-bottom: 1rem;
+      padding-left: 2rem;
+      position: relative;
+      line-height: 1.6;
+    }
+    
+    .promises-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--pastel-mint);
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    
+    .alternative-section {
+      background: var(--accent-subtle);
+      border-radius: 8px;
+      padding: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .alternative-title {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      font-weight: 400;
+    }
+    
+    .alternative-text {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    
+    .rss-link {
+      display: inline-block;
+      color: var(--text-primary);
+      text-decoration: none;
+      padding: .75rem 1.5rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-light);
+      border-radius: 4px;
+      transition: all .2s;
+    }
+    
+    .rss-link:hover {
+      background: var(--text-primary);
+      color: var(--bg-primary);
+      border-color: var(--text-primary);
+    }
+    
+    @media (max-width: 768px) {
+      .subscribe-container {
+        padding: 2rem 1.5rem;
+      }
+      
+      .subscribe-title {
+        font-size: 2rem;
+      }
+      
+      .subscribe-form {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .form-section {
+        padding: 2rem;
+      }
+      
+      .preview-section {
+        padding: 2rem;
+      }
+      
+      .stats-section {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+      
+      .stat-item {
+        padding: 1rem;
+      }
+      
+      .stat-number {
+        font-size: 2rem;
+      }
+    }
+  </style>
+
+  <main class="subscribe-container">
+    <header class="subscribe-header">
+      <h1 class="subscribe-title">Subscribe</h1>
+      <p class="subscribe-subtitle">
+        Join the rescue mission. Get the week's best finds delivered to your inbox.
+      </p>
+    </header>
+
+    <div class="stats-section">
+      <div class="stat-item">
+        <span class="stat-number">2,847</span>
+        <div class="stat-label sans">Current Subscribers</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">47</span>
+        <div class="stat-label sans">Issues Sent</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">∞</span>
+        <div class="stat-label sans">Hours of Reading Time Saved</div>
+      </div>
+    </div>
+
+    <div class="preview-section">
+      <h2 class="preview-title">What You'll Get</h2>
+      <div class="preview-content">
+        <p>
+          <strong>Every Tuesday morning,</strong> a carefully curated selection of articles, podcasts, videos, and other finds that deserve your attention. Each issue includes:
+        </p>
+        <p>
+          <strong>Today's Picks:</strong> 3-5 recent discoveries with context about why they matter.
+        </p>
+        <p>
+          <strong>Featured Rescue:</strong> One piece that's particularly worth your time, with detailed curator notes.
+        </p>
+        <p>
+          <strong>Quick Reads:</strong> Shorter pieces for when you have 5 minutes.
+        </p>
+        <p>
+          <strong>From the Archive:</strong> Older gems that are worth rediscovering.
+        </p>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h2 class="form-title">Join the Mission</h2>
+      <p class="form-description">
+        No spam, no daily emails, no algorithmic nonsense. Just good stuff, once a week.
+      </p>
+      
+      <form class="subscribe-form" action="#" method="post">
+        <input 
+          type="email" 
+          class="email-input sans" 
+          placeholder="your@email.com" 
+          required
+          aria-label="Email address"
+        >
+        <button type="submit" class="subscribe-button sans">
+          Subscribe
+        </button>
+      </form>
+      
+      <p class="privacy-note sans">
+        We respect your privacy. Unsubscribe anytime. No tracking, no ads, no selling your data.
+      </p>
+    </div>
+
+    <div class="promises-section">
+      <h2 class="promises-title">What We Promise</h2>
+      <ul class="promises-list">
+        <li><strong>Weekly delivery:</strong> Every Tuesday, consistently, without fail.</li>
+        <li><strong>Human curation:</strong> No AI, no algorithms, just careful human selection.</li>
+        <li><strong>Quality over quantity:</strong> 5 great things, not 50 mediocre ones.</li>
+        <li><strong>Context included:</strong> Why something matters, not just what it says.</li>
+        <li><strong>Easy unsubscribe:</strong> One click, no guilt, no questions asked.</li>
+        <li><strong>No tracking:</strong> We don't know if you opened it, and we like it that way.</li>
+      </ul>
+    </div>
+
+    <div class="alternative-section">
+      <h2 class="alternative-title">Prefer RSS?</h2>
+      <p class="alternative-text">
+        If you're one of those wonderful people who still uses an RSS reader, 
+        we've got you covered. All our content is available via RSS, updated weekly.
+      </p>
+      <a href="/feed.xml" class="rss-link sans">
+        📡 Subscribe via RSS
+      </a>
+    </div>
+  </main>
+</BaseLayout>

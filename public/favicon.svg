@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <defs>
+    <linearGradient id="flame-gradient" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#e74c3c;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#f39c12;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f1c40f;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main flame shape -->
+  <path d="M16 3c-2 0-4 1.5-4 4 0 1.5 1 3 1 4.5 0 1-1 2-1 3.5 0 3 2.5 5.5 5.5 5.5s5.5-2.5 5.5-5.5c0-1.5-1-2.5-1-3.5 0-1.5 1-3 1-4.5 0-2.5-2-4-4-4l-3 0z" 
+        fill="url(#flame-gradient)" 
+        opacity="0.9"/>
+        
+  <!-- Inner flame -->
+  <path d="M16 6c-1.5 0-2.5 1-2.5 2.5 0 1 0.5 2 0.5 3 0 0.5-0.5 1-0.5 2 0 2 1.5 3.5 3.5 3.5s3.5-1.5 3.5-3.5c0-1-0.5-1.5-0.5-2 0-1 0.5-2 0.5-3 0-1.5-1-2.5-2.5-2.5l-2 0z" 
+        fill="#ffffff" 
+        opacity="0.3"/>
+        
+  <!-- Base/ember -->
+  <circle cx="16" cy="26" r="3" fill="#8b4513" opacity="0.6"/>
+  <circle cx="16" cy="24" r="2" fill="#d2691e" opacity="0.4"/>
+  
+  <style>
+    @media (prefers-color-scheme: dark) {
+      circle:nth-of-type(1) { fill: #5d4e37; }
+      circle:nth-of-type(2) { fill: #8b7355; }
+    }
+  </style>
+</svg>

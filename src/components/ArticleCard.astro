@@ -1,0 +1,61 @@
+---
+export interface Props {
+  title: string;
+  excerpt: string;
+  source: string;
+  type: string;
+  readingTime: number;
+  url?: string;
+  foundDate?: string;
+  curatorNote?: string;
+  featured?: boolean;
+}
+
+const { 
+  title, 
+  excerpt, 
+  source, 
+  type, 
+  readingTime, 
+  url = '#', 
+  foundDate, 
+  curatorNote,
+  featured = false 
+} = Astro.props;
+
+const typeClassMap: { [key: string]: string } = {
+  essay: 'meta-essay',
+  podcast: 'meta-podcast',
+  newsletter: 'meta-newsletter',
+  video: 'meta-video',
+  book: 'meta-book',
+  paper: 'meta-paper',
+  thread: 'meta-thread'
+};
+
+const typeClass = typeClassMap[type.toLowerCase()] || 'meta-essay';
+---
+
+<article>
+  <div class="article-rec">
+    {foundDate && (
+      <time class="time-marker">Found {foundDate}</time>
+    )}
+    <span class={`article-meta ${typeClass} sans`}>
+      {type.charAt(0).toUpperCase() + type.slice(1)}
+      {readingTime > 0 && ` · ${readingTime} min`}
+    </span>
+    <h2 class="article-title">
+      <a href={url}>{title}</a>
+    </h2>
+    <p class="article-excerpt">{excerpt}</p>
+    <div class="article-source sans">{source}</div>
+  </div>
+
+  {curatorNote && (
+    <aside class="curator-note" style="margin-top: 1.5rem">
+      <span class="quality-mark quality-deep"></span>
+      {curatorNote}
+    </aside>
+  )}
+</article>

@@ -1,0 +1,85 @@
+---
+import AutoEmbed from './AutoEmbed.astro';
+
+export interface Props {
+  content: string;
+}
+
+const { content } = Astro.props;
+
+// Process content to find standalone URLs and convert them to embeds
+function processContent(content: string) {
+  // Split content into lines
+  const lines = content.split('\n');
+  const processedLines: Array<{ type: 'text' | 'embed', content: string }> = [];
+  
+  for (const line of lines) {
+    const trimmedLine = line.trim();
+    
+    // Check if line is a standalone URL (common embed platforms)
+    const embedUrlPattern = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|spotify\.com|vimeo\.com|twitter\.com|x\.com|codepen\.io|gist\.github\.com|soundcloud\.com)[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=]+$/i;
+    
+    if (embedUrlPattern.test(trimmedLine)) {
+      // Add full URL if missing protocol
+      const fullUrl = trimmedLine.startsWith('http') ? trimmedLine : `https://${trimmedLine}`;
+      processedLines.push({ type: 'embed', content: fullUrl });
+    } else {
+      processedLines.push({ type: 'text', content: line });
+    }
+  }
+  
+  return processedLines;
+}
+
+const processedContent = processContent(content);
+
+// Group consecutive text lines together
+const groupedContent: Array<{ type: 'text' | 'embed', content: string }> = [];
+let currentTextGroup = '';
+
+for (const item of processedContent) {
+  if (item.type === 'text') {
+    currentTextGroup += item.content + '\n';
+  } else {
+    if (currentTextGroup.trim()) {
+      groupedContent.push({ type: 'text', content: currentTextGroup.trim() });
+      currentTextGroup = '';
+    }
+    groupedContent.push(item);
+  }
+}
+
+// Don't forget the last text group
+if (currentTextGroup.trim()) {
+  groupedContent.push({ type: 'text', content: currentTextGroup.trim() });
+}
+---
+
+<div class="content-processor">
+  {groupedContent.map(item => (
+    item.type === 'text' ? (
+      <div class="text-content" set:html={item.content} />
+    ) : (
+      <AutoEmbed url={item.content} />
+    )
+  ))}
+</div>
+
+<style>
+  .content-processor {
+    line-height: 1.7;
+  }
+  
+  .text-content {
+    margin-bottom: 1rem;
+  }
+  
+  .text-content:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* Ensure proper spacing between embeds and text */
+  .content-processor > * + * {
+    margin-top: 1.5rem;
+  }
+</style>

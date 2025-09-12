@@ -1,0 +1,64 @@
+---
+export const prerender = true;
+
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import ArtworkShowcase from '../components/ArtworkShowcase.astro';
+
+const issueNumber = 47;
+
+// Get real articles from content collection
+const allArticles = await getCollection('articles');
+const featuredArticle = allArticles.find(article => article.data.featured);
+---
+
+<BaseLayout title="Issue 047" issueNumber={issueNumber}>
+  <!-- Section Navigator (Left side) -->
+  <nav class="section-nav sans">
+    <a href="#featured" class="section-nav-item">Featured</a>
+    <a href="#art" class="section-nav-item">Today's art</a>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Opening Quote Block -->
+    <blockquote class="quote-block" style="max-width: 700px; margin: 3rem auto">
+      Everyone's publishing, nobody's reading. The internet has become a write-only medium. 
+      My job is to actually read things, so you know what's worth your time.
+      <cite class="quote-source sans">— This week's mantra</cite>
+    </blockquote>
+
+    <!-- Featured Piece -->
+    {featuredArticle && (
+      <section id="featured">
+        <article class="featured">
+          <span class="featured-badge sans">Rescued from the flames</span>
+          <h2 class="featured-title">
+            <a href={`/articles/${featuredArticle.slug}`}>{featuredArticle.data.title}</a>
+          </h2>
+          <p class="featured-excerpt">
+            {featuredArticle.data.excerpt}
+          </p>
+          <div class="article-source sans" style="margin-top: 1rem">{featuredArticle.data.source} · {featuredArticle.data.readingTime} min read</div>
+          
+          <aside class="margin-note" style="top: 20px">
+            {featuredArticle.data.curatorNotes}
+          </aside>
+        </article>
+      </section>
+    )}
+
+    <!-- Public Domain Art Showcase -->
+    <section id="art">
+      <ArtworkShowcase />
+    </section>
+
+    <!-- Closing Quote -->
+    <blockquote class="quote-block" style="max-width: 600px; margin: 4rem auto">
+      The fire's still burning, but occasionally you find something that didn't need to burn. 
+      That's what we're doing here—rescue work.
+      <cite class="quote-source sans">See you next week</cite>
+    </blockquote>
+  </main>
+</BaseLayout>

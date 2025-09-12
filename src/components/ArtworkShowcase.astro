@@ -1,0 +1,148 @@
+---
+import { getCollection } from 'astro:content';
+
+// Get featured artwork
+const artworks = await getCollection('artwork', ({ data }) => {
+  return data.featured_on_homepage === true;
+});
+
+// Get the most recent featured artwork
+const featuredArtwork = artworks
+  .sort((a, b) => new Date(b.data.created_date).getTime() - new Date(a.data.created_date).getTime())[0];
+---
+
+{featuredArtwork && (
+  <section class="artwork-showcase">
+    <a href={`/artwork/${featuredArtwork.slug}`} class="artwork-link">
+      <div class="artwork-container">
+        <div class="artwork-image">
+          <img 
+            src={featuredArtwork.data.image} 
+            alt={`${featuredArtwork.data.title} by ${featuredArtwork.data.artist}`}
+            loading="lazy"
+          />
+        </div>
+        <div class="artwork-info">
+          <div class="artwork-label sans">Today's Art</div>
+          <h3 class="artwork-title">{featuredArtwork.data.title}</h3>
+          <p class="artwork-meta sans">
+            {featuredArtwork.data.artist}
+            {featuredArtwork.data.year && ` · ${featuredArtwork.data.year}`}
+          </p>
+          {featuredArtwork.data.why_featured && (
+            <p class="artwork-note">{featuredArtwork.data.why_featured}</p>
+          )}
+        </div>
+      </div>
+    </a>
+    {featuredArtwork.data.source_url && (
+      <div class="artwork-external-link">
+        <a 
+          href={featuredArtwork.data.source_url} 
+          class="artwork-source sans" 
+          target="_blank" 
+          rel="noopener"
+        >
+          View at {featuredArtwork.data.source_institution || 'source'}
+        </a>
+      </div>
+    )}
+  </section>
+)}
+
+<style>
+  .artwork-showcase {
+    margin: 4rem 0;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .artwork-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .artwork-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .artwork-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .artwork-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-tertiary);
+    margin-bottom: 0.5rem;
+  }
+
+  .artwork-title {
+    font-size: 1.8rem;
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+  }
+
+  .artwork-meta {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    font-style: italic;
+  }
+
+  .artwork-note {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .artwork-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .artwork-external-link {
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  .artwork-source {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .artwork-source::after {
+    content: "→";
+    margin-left: 0.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .artwork-container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    
+    .artwork-title {
+      font-size: 1.4rem;
+    }
+  }
+</style>

@@ -1,0 +1,83 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SEO from '../components/SEO.astro';
+import CriticalCSS from '../components/CriticalCSS.astro';
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description?: string;
+  issueNumber?: number;
+  image?: string;
+  type?: 'website' | 'article';
+  article?: {
+    publishedTime?: string;
+    modifiedTime?: string;
+    author?: string;
+    section?: string;
+    tags?: string[];
+  };
+  noindex?: boolean;
+}
+
+const { 
+  title, 
+  description = 'Rescuing signal from the algorithmic inferno', 
+  issueNumber,
+  image,
+  type = 'website',
+  article,
+  noindex = false
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- SEO and Social Meta -->
+  <SEO 
+    title={title === 'From the Dumpster Fire' ? title : `${title} - From the Dumpster Fire`}
+    description={description}
+    image={image}
+    type={type}
+    article={article}
+    noindex={noindex}
+  />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/pwa-192x192.png">
+  
+  <!-- Critical CSS for Above-the-Fold Content -->
+  <CriticalCSS />
+  
+  <!-- Resource Hints for Performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://platform.twitter.com">
+  <link rel="dns-prefetch" href="https://www.youtube.com">
+  <link rel="dns-prefetch" href="https://open.spotify.com">
+  <link rel="dns-prefetch" href="https://player.vimeo.com">
+  <link rel="dns-prefetch" href="https://w.soundcloud.com">
+  
+  <!-- Preload Critical Resources -->
+  <link rel="modulepreload" href="/src/pages/search.astro">
+  
+  <!-- PWA Meta Tags -->
+  <link rel="apple-touch-icon" href="/pwa-192x192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="From the Dumpster Fire">
+  
+</head>
+<body>
+  <Header issueNumber={issueNumber} />
+  
+  <slot />
+  
+  <Footer />
+</body>
+</html>

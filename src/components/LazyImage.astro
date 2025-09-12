@@ -1,0 +1,74 @@
+---
+export interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  decoding?: 'async' | 'sync' | 'auto';
+  fetchpriority?: 'high' | 'low' | 'auto';
+}
+
+const { 
+  src, 
+  alt, 
+  width, 
+  height, 
+  class: className = '', 
+  loading = 'lazy',
+  decoding = 'async',
+  fetchpriority = 'auto'
+} = Astro.props;
+
+// Generate srcset for responsive images if width/height provided
+const generateSrcset = (baseSrc: string, baseWidth?: number) => {
+  if (!baseWidth) return undefined;
+  
+  const sizes = [480, 768, 1024, 1200, 1600];
+  const validSizes = sizes.filter(size => size <= baseWidth);
+  
+  if (validSizes.length === 0) return undefined;
+  
+  return validSizes.map(size => {
+    const scaledSrc = baseSrc.replace(/\.(jpg|jpeg|png|webp)$/i, `_${size}w.$1`);
+    return `${scaledSrc} ${size}w`;
+  }).join(', ');
+};
+
+const srcset = generateSrcset(src, width);
+const sizes = width ? `(max-width: 768px) 100vw, (max-width: 1024px) 50vw, ${Math.min(width, 800)}px` : undefined;
+---
+
+<img 
+  src={src}
+  alt={alt}
+  width={width}
+  height={height}
+  class={className}
+  loading={loading}
+  decoding={decoding}
+  fetchpriority={fetchpriority}
+  srcset={srcset}
+  sizes={sizes}
+/>
+
+<style>
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Placeholder for loading state */
+  img[loading="lazy"] {
+    background: linear-gradient(90deg, var(--accent-subtle) 25%, transparent 25%, transparent 75%, var(--accent-subtle) 75%);
+    background-size: 20px 20px;
+    animation: loading-shimmer 1.5s linear infinite;
+  }
+  
+  @keyframes loading-shimmer {
+    0% { background-position: -20px 0; }
+    100% { background-position: 20px 0; }
+  }
+</style>

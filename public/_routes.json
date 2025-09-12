@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "include": [
+    "/*"
+  ],
+  "exclude": [
+    "/favicon.ico",
+    "/favicon.svg",
+    "/pwa-192x192.png",
+    "/pwa-512x512.png",
+    "/manifest.webmanifest",
+    "/sw.js",
+    "/registerSW.js",
+    "/workbox-*.js",
+    "/_astro/*",
+    "/assets/*"
+  ]
+}
