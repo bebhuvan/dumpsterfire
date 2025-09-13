@@ -4,9 +4,21 @@ export const prerender = true;
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-// Get all searchable content
-const articles = await getCollection('articles');
-const artworks = await getCollection('artwork');
+// Get all searchable content (with error handling)
+let articles = [];
+let artworks = [];
+
+try {
+  articles = await getCollection('articles');
+} catch (error) {
+  console.log('No articles found yet');
+}
+
+try {
+  artworks = await getCollection('artwork');
+} catch (error) {
+  console.log('No artwork found yet');
+}
 
 // Format for client-side search
 const searchData = [

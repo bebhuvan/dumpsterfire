@@ -5,8 +5,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import { getCollection } from 'astro:content';
 
-// Get real articles from content collection
-const archiveArticles = await getCollection('articles');
+// Get real articles from content collection (with error handling)
+let archiveArticles = [];
+
+try {
+  archiveArticles = await getCollection('articles');
+} catch (error) {
+  // No articles yet - this is fine
+  console.log('No articles found yet');
+}
 
 // Sample issue archive - will be replaced with real data
 const issueArchive = [

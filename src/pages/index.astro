@@ -5,9 +5,17 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArtworkShowcase from '../components/ArtworkShowcase.astro';
 
-// Get real articles from content collection
-const allArticles = await getCollection('articles');
-const featuredArticle = allArticles.find(article => article.data.featured);
+// Get real articles from content collection (with error handling)
+let allArticles = [];
+let featuredArticle = null;
+
+try {
+  allArticles = await getCollection('articles');
+  featuredArticle = allArticles.find(article => article.data.featured);
+} catch (error) {
+  // No articles yet - this is fine
+  console.log('No articles found yet');
+}
 ---
 
 <BaseLayout title="From the Dumpster Fire">
