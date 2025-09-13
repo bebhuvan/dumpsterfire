@@ -1,4 +1,6 @@
 ---
+export const prerender = true;
+
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
@@ -130,7 +132,7 @@ const searchData = [
 
       noResults.style.display = 'none';
       
-      // Create results using a cleaner template approach with proper escaping
+      // Create results using ArticleCard structure for consistent styling
       const resultsHTML = results.map(result => {
         const safeTitle = escapeHtml(result.title);
         const safeExcerpt = escapeHtml(truncate(result.excerpt, 150));
@@ -138,17 +140,32 @@ const searchData = [
         const safeSource = result.source ? escapeHtml(result.source) : '';
         const safeAuthor = result.author ? escapeHtml(result.author) : '';
         
+        // Map type classes like ArticleCard
+        const typeClassMap = {
+          essay: 'meta-essay',
+          podcast: 'meta-podcast',
+          newsletter: 'meta-newsletter',
+          video: 'meta-video',
+          book: 'meta-book',
+          paper: 'meta-paper',
+          thread: 'meta-thread',
+          article: 'meta-essay',
+          artwork: 'meta-essay'
+        };
+        const typeClass = typeClassMap[result.type.toLowerCase()] || 'meta-essay';
+        
         return `
-          <article class="search-result">
-            <div class="result-meta">
-              <span class="result-type">${escapeHtml(result.type)}</span>
-              ${safeSource ? `<span class="result-source">${safeSource}</span>` : ''}
+          <article>
+            <div class="article-rec">
+              <span class="article-meta ${typeClass} sans">
+                ${escapeHtml(result.type.charAt(0).toUpperCase() + result.type.slice(1))}
+              </span>
+              <h2 class="article-title">
+                <a href="${safeUrl}">${highlightText(safeTitle, query)}</a>
+              </h2>
+              <p class="article-excerpt">${highlightText(safeExcerpt, query)}</p>
+              <div class="article-source sans">${safeSource || safeAuthor}</div>
             </div>
-            <h3 class="result-title">
-              <a href="${safeUrl}">${highlightText(safeTitle, query)}</a>
-            </h3>
-            <p class="result-excerpt">${highlightText(safeExcerpt, query)}</p>
-            ${safeAuthor ? `<div class="result-author">by ${safeAuthor}</div>` : ''}
           </article>
         `;
       }).join('');
@@ -201,7 +218,8 @@ const searchData = [
     .search-container {
       max-width: 800px;
       margin: 0 auto;
-      padding: 4rem 2rem;
+      padding: 2rem 2rem;
+      min-height: calc(100vh - 300px);
     }
 
     .search-header {
@@ -263,50 +281,6 @@ const searchData = [
       margin-bottom: 2rem;
     }
 
-    .search-result {
-      padding: 1.5rem 0;
-      border-bottom: 1px solid var(--border-light);
-    }
-
-    .result-meta {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .result-type {
-      font-size: 0.8rem;
-      padding: 0.2rem 0.6rem;
-      background: var(--accent-subtle);
-      border-radius: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .result-source {
-      font-size: 0.8rem;
-      color: var(--text-tertiary);
-      font-style: italic;
-    }
-
-    .result-title {
-      font-size: 1.4rem;
-      margin-bottom: 0.5rem;
-      line-height: 1.3;
-    }
-
-
-    .result-excerpt {
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: 0.5rem;
-    }
-
-    .result-author {
-      font-size: 0.9rem;
-      color: var(--text-tertiary);
-      font-style: italic;
-    }
 
     mark {
       background: rgba(255, 255, 0, 0.3);
@@ -322,7 +296,7 @@ const searchData = [
 
     @media (max-width: 768px) {
       .search-container {
-        padding: 2rem 1.5rem;
+        padding: 1.5rem 1.5rem;
       }
 
       .search-title {

@@ -42,7 +42,7 @@ const featuredArticle = allArticles.find(article => article.data.featured);
           </p>
           <div class="article-source sans" style="margin-top: 1rem">{featuredArticle.data.source} · {featuredArticle.data.readingTime} min read</div>
           
-          <aside class="margin-note" style="top: 20px">
+          <aside class="curator-note">
             {featuredArticle.data.curatorNotes}
           </aside>
         </article>
@@ -52,6 +52,155 @@ const featuredArticle = allArticles.find(article => article.data.featured);
     <!-- Public Domain Art Showcase -->
     <section id="art">
       <ArtworkShowcase />
+    </section>
+
+    <!-- Quick Picks Section -->
+    <section class="quick-picks-section">
+      <h2 class="section-heading">Quick Rescues</h2>
+      <div class="quick-picks">
+        <article class="quick-pick">
+          <span class="quick-pick-type meta-essay">ESSAY • 8 MIN</span>
+          <h3 class="quick-pick-title">
+            <a href="#">The Internet Doesn't Have to Be Awful</a>
+          </h3>
+          <p class="quick-pick-note">Ethan Zuckerman on reimagining digital public spaces</p>
+        </article>
+        
+        <article class="quick-pick">
+          <span class="quick-pick-type meta-podcast">PODCAST • 47 MIN</span>
+          <h3 class="quick-pick-title">
+            <a href="#">How to Think About Time</a>
+          </h3>
+          <p class="quick-pick-note">Oliver Burkeman dismantles productivity culture</p>
+        </article>
+        
+        <article class="quick-pick">
+          <span class="quick-pick-type meta-video">VIDEO • 12 MIN</span>
+          <h3 class="quick-pick-title">
+            <a href="#">The Beauty of Mathematical Thinking</a>
+          </h3>
+          <p class="quick-pick-note">Grant Sanderson makes calculus feel like poetry</p>
+        </article>
+        
+        <article class="quick-pick">
+          <span class="quick-pick-type meta-paper">PAPER • 23 MIN</span>
+          <h3 class="quick-pick-title">
+            <a href="#">Attention Is Not a Resource</a>
+          </h3>
+          <p class="quick-pick-note">New research challenges the attention economy metaphor</p>
+        </article>
+        
+        <article class="quick-pick">
+          <span class="quick-pick-type meta-newsletter">NEWSLETTER • 5 MIN</span>
+          <h3 class="quick-pick-title">
+            <a href="#">The Tyranny of Convenience</a>
+          </h3>
+          <p class="quick-pick-note">Tim Wu on how ease became the ultimate value</p>
+        </article>
+        
+        <article class="quick-pick">
+          <span class="quick-pick-type meta-book">BOOK EXCERPT • 15 MIN</span>
+          <h3 class="quick-pick-title">
+            <a href="#">Ways of Being</a>
+          </h3>
+          <p class="quick-pick-note">James Bridle explores non-human intelligence</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Deep Cuts Section -->
+    <section class="deep-cuts">
+      <h2 class="section-heading">Deep Cuts</h2>
+      <div class="deep-cuts-grid">
+        <article class="article-rec">
+          <span class="article-meta meta-essay sans">LONGREAD • 35 MIN</span>
+          <h3 class="article-title">
+            <a href="#">The Case Against Reality</a>
+          </h3>
+          <p class="article-excerpt">
+            Donald Hoffman argues that evolution has programmed us to see illusions, not reality. 
+            His interface theory of perception suggests we're all living in a species-specific hallucination.
+          </p>
+          <div class="article-source sans">Quanta Magazine</div>
+          <aside class="curator-note">
+            This completely rewired how I think about consciousness. Hoffman's argument that fitness beats truth in evolution is unsettling and brilliant.
+          </aside>
+        </article>
+        
+        <article class="article-rec">
+          <span class="article-meta meta-thread sans">TWITTER THREAD • 7 MIN</span>
+          <h3 class="article-title">
+            <a href="#">On Libraries and Late Capitalism</a>
+          </h3>
+          <p class="article-excerpt">
+            A thread about how public libraries are the last indoor spaces where you're allowed to exist without buying something.
+          </p>
+          <div class="article-source sans">@sonyasupposedly</div>
+        </article>
+        
+        <article class="article-rec">
+          <span class="article-meta meta-book sans">BOOK • 22 MIN</span>
+          <h3 class="article-title">
+            <a href="#">The Ministry for the Future</a>
+          </h3>
+          <p class="article-excerpt">
+            Kim Stanley Robinson's climate fiction doesn't sugar-coat the coming decades, 
+            but somehow manages to be hopeful without being naive. Essential reading for anyone 
+            who wants to think seriously about climate solutions.
+          </p>
+          <div class="article-source sans">Orbit Books, 2020</div>
+        </article>
+        
+        <article class="article-rec">
+          <span class="article-meta meta-podcast sans">PODCAST • 45 MIN</span>
+          <h3 class="article-title">
+            <a href="#">The Ezra Klein Show: Jenny Odell on Time and Attention</a>
+          </h3>
+          <p class="article-excerpt">
+            A conversation about slowing down in a world that profits from our acceleration. 
+            Odell's thoughts on "temporal sovereignty" are exactly what you need to hear.
+          </p>
+          <div class="article-source sans">The New York Times</div>
+          <aside class="curator-note">
+            Listen to this at 1x speed. Trust me.
+          </aside>
+        </article>
+      </div>
+    </section>
+
+    <!-- Void Break -->
+    <div class="void">
+      <p class="void-text">INTERMISSION</p>
+    </div>
+
+    <!-- Worth Your Time Section -->
+    <section class="worth-your-time">
+      <h2 class="section-heading">Worth Your Time This Week</h2>
+      <div class="magazine-columns">
+        <article class="mini-rec">
+          <span class="time-marker">MONDAY</span>
+          <h4><a href="#">The Feminist Case for Talking to Strangers</a></h4>
+          <p>Amelia Horgan on breaking the social atomization trap</p>
+        </article>
+        
+        <article class="mini-rec">
+          <span class="time-marker">TUESDAY</span>
+          <h4><a href="#">What Medieval Monks Got Right About Focus</a></h4>
+          <p>Jamie Kreiner on attention before the smartphone</p>
+        </article>
+        
+        <article class="mini-rec">
+          <span class="time-marker">WEDNESDAY</span>
+          <h4><a href="#">The Paradox of Preparation</a></h4>
+          <p>Why over-preparing makes you less ready</p>
+        </article>
+        
+        <article class="mini-rec">
+          <span class="time-marker">THURSDAY</span>
+          <h4><a href="#">In Defense of Disorder</a></h4>
+          <p>Tim Harford celebrates creative messiness</p>
+        </article>
+      </div>
     </section>
 
     <!-- Closing Quote -->

@@ -53,9 +53,10 @@ const featuredArtwork = artworks
 <style>
   .artwork-showcase {
     margin: 4rem 0;
-    padding: 2rem 0;
-    border-top: 1px solid var(--border-light);
-    border-bottom: 1px solid var(--border-light);
+    padding: 3rem 2rem;
+    background: rgba(248, 250, 252, 0.6);
+    transform: rotate(-0.2deg);
+    position: relative;
   }
 
   .artwork-container {
@@ -70,8 +71,10 @@ const featuredArtwork = artworks
   .artwork-image {
     position: relative;
     overflow: hidden;
-    border-radius: 4px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+    transform: rotate(0.3deg);
+    border: 8px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   }
 
   .artwork-image img {
@@ -81,18 +84,26 @@ const featuredArtwork = artworks
   }
 
   .artwork-label {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-tertiary);
-    margin-bottom: 0.5rem;
+    letter-spacing: 0.15em;
+    color: var(--text-primary);
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 0.3rem 0.6rem;
+    display: inline-block;
+    border: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   .artwork-title {
-    font-size: 1.8rem;
-    line-height: 1.3;
-    margin-bottom: 0.5rem;
-    font-weight: 400;
+    font-size: 2rem;
+    line-height: 1.2;
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    letter-spacing: -0.02em;
   }
 
   .artwork-meta {
