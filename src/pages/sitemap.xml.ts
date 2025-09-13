@@ -1,11 +1,37 @@
 import { getCollection } from 'astro:content';
 import type { APIRoute } from 'astro';
 
+export const prerender = true;
+
 export const GET: APIRoute = async (context) => {
-  const articles = await getCollection('articles');
-  const artworks = await getCollection('artwork');
-  const issues = await getCollection('issues');
-  const topics = await getCollection('topics');
+  let articles = [];
+  let artworks = [];
+  let issues = [];
+  let topics = [];
+
+  try {
+    articles = await getCollection('articles');
+  } catch (error) {
+    console.log('No articles found');
+  }
+
+  try {
+    artworks = await getCollection('artwork');
+  } catch (error) {
+    console.log('No artwork found');
+  }
+
+  try {
+    issues = await getCollection('issues');
+  } catch (error) {
+    console.log('No issues found');
+  }
+
+  try {
+    topics = await getCollection('topics');
+  } catch (error) {
+    console.log('No topics found');
+  }
 
   const site = context.site ?? 'https://fromdumpsterfire.com';
 

@@ -2,6 +2,8 @@ import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 import type { APIRoute } from 'astro';
 
+export const prerender = true;
+
 export const GET: APIRoute = async (context) => {
   let articles = [];
   
