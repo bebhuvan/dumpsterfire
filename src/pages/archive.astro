@@ -3,6 +3,7 @@ export const prerender = true;
 
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
 
 // Get real articles from content collection
 const archiveArticles = await getCollection('articles');
