@@ -1,0 +1,17 @@
+name = "dumpsterfire"
+main = "worker.js"
+compatibility_date = "2024-12-10"
+
+[build]
+command = "npm run build"
+
+[[routes]]
+pattern = "fromthedumpsterfire.com/*"
+zone_name = "fromthedumpsterfire.com"
+
+[[routes]]
+pattern = "www.fromthedumpsterfire.com/*"
+zone_name = "fromthedumpsterfire.com"
+
+[vars]
+SITE_URL = "https://fromthedumpsterfire.com"

@@ -16,7 +16,7 @@ export const GET: APIRoute = async (context) => {
   return rss({
     title: 'From the Dumpster Fire',
     description: 'Rescuing signal from the algorithmic inferno. A curated newsletter of essential reads, rescued from the endless scroll.',
-    site: context.site ?? 'https://fromdumpsterfire.com',
+    site: context.site ?? 'https://fromthedumpsterfire.com',
     items: recentArticles.map((article) => ({
       title: article.data.title,
       pubDate: new Date(article.data.publishedDate),
@@ -54,14 +54,14 @@ export const GET: APIRoute = async (context) => {
     customData: `
       <language>en-us</language>
       <copyright>From the Dumpster Fire</copyright>
-      <managingEditor>hello@fromdumpsterfire.com (From the Dumpster Fire)</managingEditor>
-      <webMaster>hello@fromdumpsterfire.com (From the Dumpster Fire)</webMaster>
+      <managingEditor>hello@fromthedumpsterfire.com (From the Dumpster Fire)</managingEditor>
+      <webMaster>hello@fromthedumpsterfire.com (From the Dumpster Fire)</webMaster>
       <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
       <ttl>1440</ttl>
       <image>
-        <url>https://fromdumpsterfire.com/images/rss-logo.png</url>
+        <url>https://fromthedumpsterfire.com/images/rss-logo.png</url>
         <title>From the Dumpster Fire</title>
-        <link>https://fromdumpsterfire.com</link>
+        <link>https://fromthedumpsterfire.com</link>
         <width>144</width>
         <height>144</height>
       </image>

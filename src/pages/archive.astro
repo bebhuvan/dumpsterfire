@@ -4,67 +4,12 @@ export const prerender = true;
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 
-// Sample data for archived articles
-const archiveArticles = [
-  {
-    title: "The Garden You Plant for Someone Else",
-    excerpt: "Robin Sloan on creating things that outlast our attention spans. A piece about websites, olive trees, and the radical act of planning for a future you won't optimize for.",
-    source: "Robin Sloan's Lab Newsletter",
-    type: "essay",
-    readingTime: 28,
-    url: "/articles/the-garden-you-plant-for-someone-else",
-    foundDate: "1 week ago"
-  },
-  {
-    title: "The Cost of Constant Novelty",
-    excerpt: "On how our hunger for the new has made us forget the pleasure of returning...",
-    source: "Aeon Magazine",
-    type: "essay",
-    readingTime: 12,
-    foundDate: "3 days ago"
-  },
-  {
-    title: "Ezra Klein with Jenny Odell: Time, Attention, and the Climate Crisis",
-    excerpt: "What does it mean to pay attention when everything demands urgency? A conversation that refuses easy answers about productivity and presence.",
-    source: "The Ezra Klein Show",
-    type: "podcast",
-    readingTime: 47,
-    foundDate: "5 days ago",
-    curatorNote: "The silence between 23:00-23:45 contains everything. Don't skip it."
-  },
-  {
-    title: "Frank Chimero: The Shape of Design",
-    excerpt: "Chapter 3 on improvisation remains unmatched. Some books age. This one deepens. It's free online, which tells you everything about Chimero's priorities.",
-    source: "Self-published, still perfect",
-    type: "book",
-    readingTime: 45,
-    url: "/articles/frank-chimero-shape-of-design",
-    foundDate: "2 weeks ago"
-  },
-  {
-    title: "The Age of Surveillance Capitalism",
-    excerpt: "Shoshana Zuboff on behavioral surplus. Required reading for anyone who builds products or wonders why everything feels exploitative.",
-    source: "Chapter 3, Public Affairs 2019",
-    type: "book",
-    readingTime: 25,
-    foundDate: "2 weeks ago"
-  },
-  {
-    title: "The 60-Year Scientific Screwup That Helped Covid Kill",
-    excerpt: "How a misunderstanding about airborne disease persisted for decades. Sometimes the most important stories are about what we got wrong.",
-    source: "WIRED",
-    type: "essay",
-    readingTime: 18,
-    foundDate: "1 week ago"
-  }
-];
+// Get real articles from content collection
+const archiveArticles = await getCollection('articles');
 
+// Sample issue archive - will be replaced with real data
 const issueArchive = [
-  { number: 47, date: "December 15, 2024", theme: "Rescue Work" },
-  { number: 46, date: "December 8, 2024", theme: "Signal vs Noise" },
-  { number: 45, date: "December 1, 2024", theme: "Deep Time" },
-  { number: 44, date: "November 24, 2024", theme: "Attention Economy" },
-  { number: 43, date: "November 17, 2024", theme: "Digital Gardens" }
+  { number: 1, date: "Coming Soon", theme: "First Rescue" }
 ];
 ---
 
