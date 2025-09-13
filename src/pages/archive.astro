@@ -303,14 +303,14 @@ const issueArchive = [
         <div class="articles-grid">
           {archiveArticles.map(article => (
             <ArticleCard
-              title={article.title}
-              excerpt={article.excerpt}
-              source={article.source}
-              type={article.type}
-              readingTime={article.readingTime}
-              url={article.url}
-              foundDate={article.foundDate}
-              curatorNote={article.curatorNote}
+              title={article.data.title}
+              excerpt={article.data.excerpt}
+              source={article.data.source}
+              type={article.data.type || 'article'}
+              readingTime={article.data.readingTime || 5}
+              url={`/articles/${article.slug}`}
+              foundDate="Recently added"
+              curatorNote={article.data.curatorNotes}
             />
           ))}
         </div>
