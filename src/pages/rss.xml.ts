@@ -3,7 +3,14 @@ import { getCollection } from 'astro:content';
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async (context) => {
-  const articles = await getCollection('articles');
+  let articles = [];
+  
+  try {
+    articles = await getCollection('articles');
+  } catch (error) {
+    // No articles yet - return empty feed
+    console.log('No articles found for RSS feed');
+  }
   
   // Sort articles by published date, newest first
   const sortedArticles = articles.sort(
