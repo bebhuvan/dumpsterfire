@@ -90,7 +90,7 @@ const formatDate = (dateStr: string) => {
     .article-meta-top {
       display: flex;
       gap: 1rem;
-      align-items: center;
+      align-items: baseline;
       margin-bottom: 1rem;
       flex-wrap: wrap;
     }
@@ -98,7 +98,7 @@ const formatDate = (dateStr: string) => {
     .article-type {
       font-size: .7rem;
       color: var(--text-tertiary);
-      margin-bottom: .5rem;
+      margin-bottom: 0;
       letter-spacing: .08em;
       display: inline-block;
       padding: 0;
@@ -109,31 +109,59 @@ const formatDate = (dateStr: string) => {
     }
 
     .meta-essay {
-      color: #7CA3CC;
+      color: var(--text-primary);
+      background: var(--pastel-blue);
+      padding: 0.25rem 0.6rem;
+      border-radius: 12px;
+      font-weight: 600;
     }
 
     .meta-podcast {
-      color: #6BB5A3;
+      color: var(--text-primary);
+      background: var(--pastel-mint);
+      padding: 0.25rem 0.6rem;
+      border-radius: 12px;
+      font-weight: 600;
     }
 
     .meta-newsletter {
-      color: #A188B5;
+      color: var(--text-primary);
+      background: var(--pastel-lavender);
+      padding: 0.25rem 0.6rem;
+      border-radius: 12px;
+      font-weight: 600;
     }
 
     .meta-video {
-      color: #E89A9A;
+      color: var(--text-primary);
+      background: var(--pastel-coral);
+      padding: 0.25rem 0.6rem;
+      border-radius: 12px;
+      font-weight: 600;
     }
 
     .meta-book {
-      color: #6FA8A3;
+      color: var(--text-primary);
+      background: var(--pastel-sage);
+      padding: 0.25rem 0.6rem;
+      border-radius: 12px;
+      font-weight: 600;
     }
 
     .meta-paper {
-      color: #D09080;
+      color: var(--text-primary);
+      background: var(--pastel-peach);
+      padding: 0.25rem 0.6rem;
+      border-radius: 12px;
+      font-weight: 600;
     }
 
     .meta-thread {
-      color: #C9A865;
+      color: var(--text-primary);
+      background: var(--pastel-yellow);
+      padding: 0.25rem 0.6rem;
+      border-radius: 12px;
+      font-weight: 600;
     }
     
     .article-date {
@@ -190,50 +218,82 @@ const formatDate = (dateStr: string) => {
     }
     
     .curator-section {
-      background: linear-gradient(to right, rgba(200, 230, 201, .08), transparent);
-      padding: var(--spacing-md) 0;
-      padding-left: var(--spacing-md);
-      border-radius: 0;
-      margin-bottom: var(--spacing-xl);
-      border-left: 2px solid rgba(200, 230, 201, .4);
+      position: relative;
+      background: linear-gradient(135deg, rgba(184, 212, 184, 0.08) 0%, rgba(181, 216, 255, 0.05) 100%);
+      padding: 2.5rem 3rem;
+      border-radius: 8px;
+      margin: 3rem 0;
+      border: 1px solid rgba(184, 212, 184, 0.2);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+    }
+
+    .curator-section::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(to bottom, var(--pastel-sage), var(--pastel-mint));
+      border-radius: 8px 0 0 8px;
     }
     
     .curator-label {
-      font-size: .75rem;
+      font-size: .7rem;
       text-transform: uppercase;
-      letter-spacing: .08em;
+      letter-spacing: .12em;
       color: var(--text-tertiary);
-      margin-bottom: .75rem;
+      margin-bottom: 1.2rem;
+      font-weight: 600;
+      opacity: 0.8;
     }
     
     .curator-notes {
-      font-size: 1rem;
-      line-height: 1.7;
-      color: var(--text-secondary);
-      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--text-primary);
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    .curator-notes p {
+      margin: 0;
     }
     
     .highlight-quote {
       position: relative;
-      padding: 2rem 2.5rem;
-      padding-top: 3rem;
-      margin: var(--spacing-lg) 0;
-      background: linear-gradient(135deg, rgba(255, 181, 181, .08) 0%, rgba(181, 216, 255, .06) 100%);
-      border-left: 3px solid rgba(231, 76, 60, .4);
-      font-size: 1.15rem;
+      padding: 3rem 3.5rem 2.5rem 4rem;
+      margin: 4rem 0;
+      background: linear-gradient(135deg, rgba(255, 181, 181, 0.06) 0%, rgba(255, 230, 181, 0.04) 100%);
+      border: 1px solid rgba(255, 181, 181, 0.15);
+      border-radius: 12px;
+      font-size: 1.25rem;
       line-height: 1.8;
       color: var(--text-primary);
       font-style: italic;
-      border-radius: 0 4px 4px 0;
+      font-weight: 400;
+      text-align: center;
     }
-    
+
     .highlight-quote::before {
       content: "\201C";
       position: absolute;
-      top: -10px;
-      left: 20px;
-      font-size: 4rem;
-      color: rgba(231, 76, 60, .25);
+      top: 1rem;
+      left: 1.5rem;
+      font-size: 2.5rem;
+      color: rgba(255, 181, 181, 0.4);
+      font-family: "Times New Roman", Times, serif;
+      line-height: 1;
+      font-weight: bold;
+    }
+
+    .highlight-quote::after {
+      content: "\201D";
+      position: absolute;
+      bottom: 0.5rem;
+      right: 1.5rem;
+      font-size: 2.5rem;
+      color: rgba(255, 181, 181, 0.4);
       font-family: "Times New Roman", Times, serif;
       line-height: 1;
       font-weight: bold;
@@ -255,16 +315,23 @@ const formatDate = (dateStr: string) => {
     }
     
     .original-link {
-      display: inline-block;
-      color: var(--text-secondary);
+      display: inline-flex;
+      align-items: center;
+      color: var(--text-primary);
       text-decoration: none;
       font-size: 0.9rem;
       margin: 2.5rem 0;
-      padding: 1rem 1.5rem;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-light);
+      padding: 1rem 1.8rem;
+      background: var(--pastel-blue);
+      border: none;
       border-radius: 4px;
-      border-left: 3px solid var(--pastel-blue);
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+
+    .original-link::after {
+      content: "→";
+      margin-left: 0.5rem;
     }
     
     .tags-section {
@@ -287,57 +354,18 @@ const formatDate = (dateStr: string) => {
     
     .tag {
       font-size: .8rem;
-      padding: .3rem .8rem;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-light);
-      border-radius: 20px;
+      padding: .4rem .9rem;
+      background: var(--pastel-mint);
+      border: none;
+      border-radius: 15px;
       text-decoration: none;
-      color: var(--text-secondary);
-      transition: all .2s;
-    }
-    
-    .tag:hover {
-      background: var(--pastel-yellow);
-      border-color: transparent;
       color: var(--text-primary);
-    }
-    
-    .share-section {
-      position: fixed;
-      left: 2rem;
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    
-    .share-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-light);
-      display: flex;
+      font-weight: 500;
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      color: var(--text-tertiary);
-      transition: all .2s;
-      font-size: .9rem;
+      line-height: 1;
     }
     
-    .share-btn:hover {
-      background: var(--pastel-sage);
-      border-color: transparent;
-      color: var(--text-primary);
-    }
-    
-    @media (max-width: 1200px) {
-      .share-section {
-        display: none;
-      }
-    }
     
     @media (max-width: 768px) {
       .article-container {
@@ -352,15 +380,37 @@ const formatDate = (dateStr: string) => {
         flex-direction: column;
         align-items: flex-start;
       }
+
+      .curator-section {
+        padding: 2rem;
+        margin: 2rem 0;
+      }
+
+      .curator-section::before {
+        width: 3px;
+      }
+
+      .highlight-quote {
+        padding: 2rem 2.5rem;
+        margin: 2.5rem 0;
+        font-size: 1.1rem;
+        text-align: left;
+      }
+
+      .highlight-quote::before {
+        top: 0.5rem;
+        left: 1rem;
+        font-size: 2rem;
+      }
+
+      .highlight-quote::after {
+        bottom: 0.5rem;
+        right: 1rem;
+        font-size: 2rem;
+      }
     }
   </style>
 
-  <!-- Share Buttons (Fixed Left) -->
-  <aside class="share-section" aria-label="Share this article">
-    <a href="#" class="share-btn" title="Share on Twitter">𝕏</a>
-    <a href="#" class="share-btn" title="Copy link">🔗</a>
-    <a href="#" class="share-btn" title="Save to reading list">📑</a>
-  </aside>
 
   <!-- Article Container -->
   <main class="article-container">

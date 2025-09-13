@@ -294,7 +294,7 @@ a:hover {
 
 .main-nav {
   display: flex;
-  gap: 2rem;
+  gap: 1.2rem;
   align-items: center;
 }
 
