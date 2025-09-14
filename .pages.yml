@@ -1,80 +1,72 @@
 media:
-  - name: uploads
-    label: Media
-    input: public/images/uploads
-    output: /images/uploads
-    categories: [ image ]
-  - name: files
-    label: Documents
-    input: public/files
-    output: /files
-    categories: [ document, compressed ]
+  - input: public/images
+    output: /images
+    extensions:
+      - jpg
+      - jpeg
+      - png
+      - gif
+      - webp
+      - svg
 
-# Reusable field components
 components:
   seo:
-    label: SEO Settings
-    type: object
     fields:
-      - { name: meta_title, label: Meta title, type: string, options: { maxlength: 70 } }
-      - { name: meta_description, label: Meta description, type: text, options: { maxlength: 180 } }
-      - { name: og_image, label: Social image, type: image }
+      meta_title:
+        type: text
+        label: Meta Title
+      meta_description:
+        type: textarea
+        label: Meta Description
+      og_image:
+        type: text
+        label: Open Graph Image URL
 
 content:
-  - name: articles
-    label: Articles
-    type: collection
+  # Main Articles - Curated content from external sources
+  articles:
     path: src/content/articles
-    format: yaml-frontmatter
-    filename: "{slug}.md"
-    view:
-      fields: [ title, articleType, readingTime, issueNumber, featured ]
-      sort: [ foundDate, title ]
-      default: { sort: foundDate, order: desc }
-    fields:
-      - name: title
+    view: 
+      fields:
+        - title
+        - publishedDate
+        - featured
+        - articleType
+        - topics
+    schema:
+      title:
+        type: text
         label: Title
-        type: string
         required: true
-      - name: slug
-        label: URL Slug
-        type: string
-        required: true
-        description: "kebab-case URL segment (auto-generated from title if empty)"
-      - name: subtitle
+      subtitle:
+        type: text
         label: Subtitle
-        type: string
-      - name: source
-        label: Source Publication
-        type: string
-        required: true
-        help: The original publication or platform (e.g., "Aeon Magazine", "Dense Discovery")
-      - name: originalUrl
+      originalUrl:
+        type: url
         label: Original URL
-        type: string
-        pattern: { regex: "^(https?://).+$", message: "Must be a valid URL" }
-        help: Link to the original article
-      - name: author
+      source:
+        type: text
+        label: Source Publication
+        required: true
+      author:
+        type: text
         label: Author
-        type: string
-      - name: publishedDate
+      publishedDate:
+        type: datetime
         label: Published Date
-        type: date
         required: true
-        help: When the original article was published
-      - name: foundDate
+      foundDate:
+        type: datetime
         label: Found Date
-        type: date
-        help: When you discovered this article
-      - name: readingTime
-        label: Reading Time (minutes)
+      readingTime:
         type: number
+        label: Reading Time (minutes)
         required: true
-      - name: articleType
-        label: Content Type
+      articleType:
         type: select
+        label: Article Type
         required: true
-        values:
+        options:
           - essay
           - podcast
           - video
@@ -82,101 +74,108 @@ content:
           - paper
           - thread
           - book
-      - name: topics
-        label: Topics/Tags
-        type: string
-        list:
-          min: 1
-          max: 10
-          default: []
-        help: Relevant topic tags for categorization
-      - name: issueNumber
-        label: Issue Number
+      topics:
+        type: list
+        label: Topics
+        required: true
+        schema:
+          type: text
+      issueNumber:
         type: number
-        help: If featured in a specific issue
-      - name: featured
-        label: Featured Article
+        label: Issue Number
+      featured:
         type: boolean
+        label: Featured Article
         default: false
-      - name: curatorNotes
+      curatorNotes:
+        type: rich-text
         label: Curator Notes
-        type: rich-text
         required: true
-        help: Your personal thoughts on why this article is worth reading
-      - name: excerpt
-        label: Article Summary
-        type: rich-text
+        description: "Your thoughts, analysis, and why this article matters"
+      excerpt:
+        type: textarea
+        label: Excerpt
         required: true
-        help: A summary of the article's main points
-      - name: pullQuote
+        description: "Brief summary of the article"
+      pullQuote:
+        type: textarea
         label: Pull Quote
-        type: string
-        help: A compelling quote to highlight from the article
+        description: "Key quote from the article"
+      body:
+        type: rich-text
+        label: Full Analysis
+        required: true
 
-  - name: issues
-    label: Newsletter Issues
-    type: collection
+  # Newsletter Issues
+  issues:
     path: src/content/issues
-    format: yaml-frontmatter
-    filename: "issue-{issueNumber}.md"
     view:
-      fields: [ issueNumber, title, publishDate, theme ]
-      sort: [ issueNumber ]
-      default: { sort: issueNumber, order: desc }
-    fields:
-      - name: issueNumber
-        label: Issue Number
+      fields:
+        - issueNumber
+        - publishDate
+        - title
+        - theme
+    schema:
+      issueNumber:
         type: number
+        label: Issue Number
         required: true
-      - name: title
-        label: Issue Title
-        type: string
-        required: true
-      - name: publishDate
+      publishDate:
+        type: datetime
         label: Publish Date
-        type: date
         required: true
-      - name: theme
+      title:
+        type: text
+        label: Title
+        required: true
+      theme:
+        type: text
         label: Issue Theme
-        type: string
-        help: Optional theme for the issue
-      - name: openingNote
+      openingNote:
+        type: textarea
         label: Opening Note
-        type: rich-text
-        help: Introduction or opening thoughts
-      - name: closingThought
+        description: "Intro message for the issue"
+      closingThought:
+        type: textarea
         label: Closing Thought
+        description: "Ending reflection for the issue"
+      body:
         type: rich-text
-        help: Concluding reflections
+        label: Issue Content
+        required: true
 
-  - name: topics
-    label: Topics
-    type: collection
+  # Topics/Categories
+  topics:
     path: src/content/topics
-    extension: json
-    fields:
-      - name: name
+    extension: yml
+    view:
+      fields:
+        - name
+        - slug
+        - featured
+        - color
+    schema:
+      name:
+        type: text
         label: Topic Name
-        type: string
         required: true
-      - name: slug
+      slug:
+        type: text
         label: URL Slug
-        type: string
         required: true
-      - name: description
+      description:
+        type: textarea
         label: Description
-        type: rich-text
         required: true
-      - name: icon
-        label: Icon
-        type: string
+      icon:
+        type: text
+        label: Icon (emoji)
         required: true
-        help: Icon identifier or emoji
-      - name: color
-        label: Color Theme
+      color:
         type: select
+        label: Color Theme
         required: true
-        values:
+        options:
           - coral
           - blue
           - mint
@@ -184,149 +183,112 @@ content:
           - peach
           - sage
           - yellow
-      - name: featured
-        label: Featured Topic
+      featured:
         type: boolean
+        label: Featured Topic
         default: false
 
-  # Public Domain Art Collection
-  - name: artwork
-    label: Public Domain Art
-    type: collection
-    path: src/content/artwork
-    format: yaml-frontmatter
-    filename: "{slug}.md"
+  # Editorial Notes - Curator margin notes and standalone thoughts
+  editorial:
+    path: src/content/editorial
+    extension: yml
     view:
-      fields: [ title, artist, year, featured_on_homepage ]
-      sort: [ created_date ]
-      default: { sort: created_date, order: desc }
-    fields:
-      - name: title
-        label: Artwork Title
-        type: string
+      fields:
+        - note
+        - type
+        - issue_number
+        - featured
+    schema:
+      note:
+        type: rich-text
+        label: Editorial Note
         required: true
-      - name: slug
-        label: URL Slug
-        type: string
-        required: true
-      - name: artist
-        label: Artist Name
-        type: string
-        required: true
-      - name: year
-        label: Year Created
-        type: string
-        description: "e.g., '1889' or 'c. 1650'"
-      - name: medium
-        label: Medium
-        type: string
-        description: "e.g., 'Oil on canvas', 'Watercolor', 'Engraving'"
-      - name: dimensions
-        label: Dimensions
-        type: string
-        description: "Original dimensions if known"
-      - name: image
-        label: Artwork Image
-        type: image
+      type:
+        type: select
+        label: Note Type
         required: true
         options:
-          media: uploads
-          path: artwork
-      - name: source_institution
-        label: Source Institution
-        type: string
-        description: "Museum, library, or archive"
-      - name: source_url
-        label: Source URL
-        type: string
-        pattern: { regex: "^(https?://).+$", message: "Must be a valid URL" }
-        description: "Link to original source"
-      - name: description
-        label: Description
-        type: rich-text
-        description: "Brief description or context about the artwork"
-      - name: why_featured
-        label: Why This Art?
-        type: text
-        description: "Your curatorial note about why this piece resonates"
-      - name: featured_on_homepage
-        label: Featured on Homepage
-        type: boolean
-        default: false
-        description: "Show this artwork in the homepage art section"
-      - name: created_date
-        label: Date Added
-        type: date
-        required: true
-        default: "today"
-      - { name: seo, label: SEO, component: seo }
-
-  # Editorial Notes & Commentary
-  - name: editorial
-    label: Editorial Notes
-    type: collection
-    path: src/content/editorial
-    extension: json
-    view:
-      fields: [ note, type, issue_number, featured ]
-      sort: [ created_date ]
-      default: { sort: created_date, order: desc }
-    fields:
-      - name: note
-        label: Editorial Note
-        type: text
-        required: true
-        description: "Your personal commentary, observation, or aside"
-      - name: type
-        label: Note Type
-        type: select
-        required: true
-        values:
           - curator
           - margin
           - standalone
-        description: "Curator: article-specific commentary, Margin: sidebar notes, Standalone: general observations"
-      - name: issue_number
-        label: Issue Number
+      issue_number:
         type: number
-        description: "Associate with a specific issue (optional)"
-      - name: position
-        label: Position in Layout
-        type: select
+        label: Issue Number
+      created_date:
+        type: datetime
+        label: Created Date
         required: true
+      featured:
+        type: boolean
+        label: Featured Note
+        default: false
+      position:
+        type: select
+        label: Position in Issue
         default: middle
-        values:
+        options:
           - top
           - middle
           - bottom
-        description: "Where to display this note in the newsletter layout"
-      - name: featured
-        label: Feature This Note
-        type: boolean
-        default: false
-        description: "Show prominently in the current issue"
-      - name: created_date
-        label: Date Created
-        type: date
+
+  # Artwork Collection
+  artwork:
+    path: src/content/artwork
+    view:
+      fields:
+        - title
+        - artist
+        - year
+        - featured_on_homepage
+    schema:
+      title:
+        type: text
+        label: Artwork Title
         required: true
-        default: "today"
-
-  # Site configuration
-  - name: site_config
-    label: Site Settings
-    type: file
-    path: src/data/site.json
-    format: json
-    fields:
-      - { name: title, label: Site Title, type: string, default: "From the Dumpster Fire" }
-      - { name: tagline, label: Site Tagline, type: string, default: "Rescuing signal from the algorithmic inferno" }
-      - { name: description, label: Site Description, type: text }
-      - { name: curator_name, label: Curator Name, type: string }
-      - { name: curator_bio, label: Curator Bio, type: text }
-      - { name: contact_email, label: Contact Email, type: string }
-      - { name: twitter_handle, label: Twitter Handle, type: string }
-
-# Global settings
-settings:
-  content:
-    merge: true   # preserve untouched keys when editing partial files
+      slug:
+        type: text
+        label: URL Slug
+      artist:
+        type: text
+        label: Artist Name
+        required: true
+      year:
+        type: text
+        label: Year Created
+      medium:
+        type: text
+        label: Medium
+      dimensions:
+        type: text
+        label: Dimensions
+      image:
+        type: text
+        label: Image URL
+        required: true
+      source_institution:
+        type: text
+        label: Source Institution
+      source_url:
+        type: url
+        label: Source URL
+      description:
+        type: textarea
+        label: Description
+      why_featured:
+        type: textarea
+        label: Why Featured
+        description: "Why this artwork was chosen"
+      featured_on_homepage:
+        type: boolean
+        label: Featured on Homepage
+        default: false
+      created_date:
+        type: datetime
+        label: Created Date
+        required: true
+      seo:
+        type: component
+        component: seo
+      body:
+        type: rich-text
+        label: Extended Description
